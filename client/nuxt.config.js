@@ -8,6 +8,21 @@ export default {
       { hid: 'description', name: 'description', content: '' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src:
+          'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js',
+        defer: true,
+      },
+      {
+        src: 'https://www.mattboldt.com/demos/typed-js/js/typed.custom.js',
+        defer: true,
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js',
+        defer: true,
+      },
+    ],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
