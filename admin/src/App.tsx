@@ -1,25 +1,40 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import NotFound from "pages/NotFound";
+import SignIn from "pages/SignIn";
+import React, { Fragment, useEffect } from "react";
+import {
+  Switch,
+  Route,
+  Redirect,
+  HashRouter,
+  useHistory,
+} from "react-router-dom";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import Store from "store";
 
 const App = () => {
+  const loggedIn = useRecoilValue(Store.User).loggedIn;
+  const resetUser = useResetRecoilState(Store.User);
+  useEffect(() => {
+    if (loggedIn === false && window.location.hash !== "#/signin") {
+      resetUser();
+      window.location.hash = "#/signin";
+    }
+  }, [loggedIn]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HashRouter>
+      <Switch>
+        <Route path="/signin" component={SignIn} />
+        {loggedIn && (
+          <Fragment>
+            <Route path="/" />
+            <Route path="/edit/:cid" />
+            <Route path="/add" />
+          </Fragment>
+        )}
+        <Route path="/404" component={NotFound} />
+        <Redirect to="/404" />
+      </Switch>
+    </HashRouter>
   );
 };
 
