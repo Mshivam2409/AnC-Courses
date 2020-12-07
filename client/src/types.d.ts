@@ -16,4 +16,5 @@ export interface ICourse {
     driveFiles: Array<string>
     reviews: Array<any>
     author: string
+    dept: string
 }

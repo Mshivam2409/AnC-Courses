@@ -13,6 +13,7 @@ import Reviews from "components/Reviews";
 import { useHistory, useParams } from "react-router-dom";
 import url from "utils/api";
 import { ICourse } from "types";
+import ReactMarkdown from 'react-markdown'
 
 const { TabPane } = Tabs;
 
@@ -59,7 +60,7 @@ const Course = () => {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Details" key="1">
             <Divider />
-            <Typography>{course?.contents}</Typography>
+            <Typography> <ReactMarkdown children={course?.contents as string}/> </Typography>
           </TabPane>
           <TabPane tab="Reviews" key="2">
             <Reviews course={route.cid} />
@@ -78,9 +79,9 @@ const Course = () => {
                 {course?.author}
               </a>
             </Descriptions.Item>
-            <Descriptions.Item label="Department">2017-01-10</Descriptions.Item>
+            <Descriptions.Item label="Department">{course?.dept}</Descriptions.Item>
             <Descriptions.Item label="Offered as">
-              {course?.author}
+              OE,ESO
             </Descriptions.Item>
           </Descriptions>
         </div>
