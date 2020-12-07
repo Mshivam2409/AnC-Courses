@@ -12,6 +12,7 @@ export interface IBCourse {
     offered: string
     contents: string
     reviews: Array<IBReview>
+    dept: string
 }
 
 export interface IFile {

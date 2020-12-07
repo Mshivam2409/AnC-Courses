@@ -76,15 +76,15 @@ class GoogleDriveStorageEngine {
         const folderId = await this._createFolder(courseData.number)
         var response: {
             folderId: string,
-            fileIds: Array<string>
+            files: Array<string>
         } = {
             folderId: folderId,
-            fileIds: []
+            files: []
         }
         for (let index = 0; index < files.length; index++) {
             const file = files[index];
             const fileId = await this._uploadFile(file, folderId)
-            response.fileIds.push(fileId)
+            response.files.push(JSON.stringify({ fileId: fileId, name: file.originalname }))
         }
         return response
     }

@@ -11,6 +11,7 @@ export interface ICourse extends Document {
     driveFiles: Array<string>
     reviews: Array<Types.ObjectId>
     author: string
+    dept: string
 }
 
 const CourseSchema = new Schema({
@@ -22,7 +23,8 @@ const CourseSchema = new Schema({
     driveFolder: { type: String, required: true },
     driveFiles: [{ type: String, required: true }],
     reviews: [{ type: Types.ObjectId, required: true, ref: "Review" }],
-    author: { type: String, required: true }
+    author: { type: String, required: true },
+    dept: { type: String, required: true }
 })
 
 export default model<ICourse>("Course", CourseSchema)

@@ -19,6 +19,7 @@ const AddCourse: RequestHandler = async (req, res, next) => {
             credits: data.credits,
             offered: data.offered,
             contents: data.contents,
+            dept: data.dept,
             reviews: [],
             author: req.body.author
         })
@@ -35,7 +36,7 @@ const AddCourse: RequestHandler = async (req, res, next) => {
         }
         const googleResponse = await GoogleDriveStorage._handleNewCourse(req.files as Express.Multer.File[], data)
         createdCourse.driveFolder = googleResponse.folderId
-        createdCourse.driveFiles = googleResponse.fileIds
+        createdCourse.driveFiles = googleResponse.files
         await createdCourse.save({ session: session })
         await session.commitTransaction()
         backupDB.set("courses", [...backupDB.get("courses").value(), createdCourse.toObject({ getters: true })]).write();
@@ -73,6 +74,7 @@ const addReview: RequestHandler = async (req, res, next) => {
 }
 
 const getAllCourses: RequestHandler = async (req, res, next) => {
+    console.log(req.originalUrl)
     try {
         const courses = await Course.find({})
         res.json({ courses: courses.map(course => course.toObject({ getters: true })) })
@@ -83,13 +85,29 @@ const getAllCourses: RequestHandler = async (req, res, next) => {
     }
 }
 
+const getCourse: RequestHandler = async (req, res, next) => {
+    try {
+        const course = await Course.findOne({ number: req.params.cid })
+        if (course) {
+            res.status(200).json(course.toObject({ getters: true }))
+        }
+        else {
+            res.status(404).end()
+        }
+    }
+    catch (error) {
+        console.log(error)
+        return next(new HttpError("500", 500))
+    }
+}
+
 const getReviewsbyCourse: RequestHandler = async (req, res, next) => {
     try {
         const course = await Course.findOne({ number: req.params.cid })
         const id = course?.id
         if (id) {
             const reviews = await Review.find({ course: id })
-            res.json({ reviews: reviews.map(review => review.toObject({ getters: true })) })
+            res.json(reviews.map(review => review.toObject({ getters: true })))
         }
         else {
             res.json([]);
@@ -101,4 +119,4 @@ const getReviewsbyCourse: RequestHandler = async (req, res, next) => {
     }
 }
 
-export { AddCourse, getAllCourses, getReviewsbyCourse, addReview }
+export { AddCourse, getAllCourses, getReviewsbyCourse, addReview, getCourse }
