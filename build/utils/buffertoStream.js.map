@@ -1,0 +1,1 @@
+{"version":3,"file":"buffertoStream.js","sourceRoot":"","sources":["../../src/utils/buffertoStream.ts"],"names":[],"mappings":";;AAAA,mCAA+B,CAAC,sBAAsB;AAEtD,MAAM,cAAc,GAAG,CAAC,SAAiB,EAAE,EAAE;IACzC,IAAI,GAAG,GAAG,IAAI,eAAM,EAAE,CAAC;IACvB,GAAG,CAAC,IAAI,CAAC,SAAS,CAAC,CAAC;IACpB,GAAG,CAAC,IAAI,CAAC,IAAI,CAAC,CAAC;IACf,OAAO,GAAG,CAAC;AACf,CAAC,CAAA;AAED,kBAAe,cAAc,CAAA"}

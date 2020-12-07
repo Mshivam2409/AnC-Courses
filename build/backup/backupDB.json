@@ -1,0 +1,130 @@
+{
+  "courses": [
+    {
+      "title": "ESC",
+      "number": "stssssssring",
+      "credits": "strsssssssing",
+      "offered": "strinssssssssg",
+      "contents": "strissssssssssng",
+      "reviews": [
+        {
+          "semester": "review.semasasaester",
+          "instructor": "review.iasasnstructo",
+          "grading": "review.gradasasing"
+        }
+      ]
+    },
+    {
+      "title": "ESC101",
+      "number": "stssssssring",
+      "credits": "strsssssssing",
+      "offered": "strinssssssssg",
+      "contents": "strissssssssssng",
+      "reviews": [
+        {
+          "semester": "review.semasasaester",
+          "instructor": "review.iasasnstructo",
+          "grading": "review.gradasasing"
+        }
+      ]
+    },
+    {
+      "title": "ESC101AA",
+      "number": "ESC101A",
+      "credits": "strsssssssing",
+      "offered": "strinssssssssg",
+      "contents": "strissssssssssng",
+      "reviews": [
+        {
+          "semester": "review.semasasaester",
+          "instructor": "review.iasasnstructo",
+          "grading": "review.gradasasing"
+        }
+      ]
+    },
+    {
+      "driveFiles": [
+        "1rIfyebIKJ72uFsb5yQVM28LqOCCNTPEw"
+      ],
+      "reviews": [
+        "5fbd7fa4eac0225610149e96"
+      ],
+      "_id": "5fbd7fa4eac0225610149e95",
+      "title": "TA101A",
+      "number": "TA101A",
+      "credits": "strsssssssing",
+      "offered": "strinssssssssg",
+      "contents": "strissssssssssng",
+      "driveFolder": "1AwwHMpzSUFaCuXbn7YtVSW13UCqk2_pl",
+      "__v": 0,
+      "id": "5fbd7fa4eac0225610149e95"
+    },
+    {
+      "driveFiles": [
+        "1DO4VGMLZEXKqmvjFlbPYizJUsXCMkqIC"
+      ],
+      "reviews": [
+        "5fbd929731fccf57aa3ce709"
+      ],
+      "_id": "5fbd929731fccf57aa3ce708",
+      "title": "TA101XA",
+      "number": "PEXA10A1A",
+      "credits": "strsssssssing",
+      "offered": "strinssssssssg",
+      "contents": "strissssssssssng",
+      "driveFolder": "1cS3dSC1ordzAKLVG6LtO4Xb53yWQz0Lp",
+      "__v": 0,
+      "id": "5fbd929731fccf57aa3ce708"
+    },
+    {
+      "driveFiles": [
+        "1uc3o9znlSROXgn7JNz_nW6N3-OcE_J-H",
+        "1e49e8I0Ck5LRrwrTNgOlcHA8X1E5AShQ"
+      ],
+      "reviews": [
+        "5fbd933d42092558511bc379"
+      ],
+      "_id": "5fbd933d42092558511bc378",
+      "title": "TARR101XA",
+      "number": "PERRXA10A1A",
+      "credits": "strsssssssing",
+      "offered": "strinssssssssg",
+      "contents": "strissssssssssng",
+      "driveFolder": "1XCxvvdbHYBVkrRicu67DzfTGEWI2W1CM",
+      "__v": 0,
+      "id": "5fbd933d42092558511bc378"
+    },
+    {
+      "driveFiles": [],
+      "reviews": [
+        "5fca7e8e024fc35da76308d2"
+      ],
+      "_id": "5fca7e8e024fc35da76308d1",
+      "title": "ESC201",
+      "number": "Introduction to Electronics",
+      "credits": "3-0-1-0(9)",
+      "offered": "Odd and Even",
+      "contents": "Mosfets and",
+      "author": "Shivam Malhotra",
+      "driveFolder": "11xZx9TzhdGhCQhidPkQshabEn_Ba4xiK",
+      "__v": 0,
+      "id": "5fca7e8e024fc35da76308d1"
+    },
+    {
+      "driveFiles": [],
+      "reviews": [
+        "5fca7ebd024fc35da76308d4"
+      ],
+      "_id": "5fca7ebd024fc35da76308d3",
+      "title": "Introduction to Electronics",
+      "number": "ESC201",
+      "credits": "3-0-1-0(9)",
+      "offered": "Odd and Even",
+      "contents": "Mosfets and",
+      "author": "Shivam Malhotra",
+      "driveFolder": "1o6BBdgn1O-HtecR6nXYn6MpRhGNmx2Au",
+      "__v": 0,
+      "id": "5fca7ebd024fc35da76308d3"
+    }
+  ]
+}
