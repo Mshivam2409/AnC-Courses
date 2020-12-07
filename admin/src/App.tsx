@@ -1,3 +1,5 @@
+import ControlledEditor from "components/Editor";
+import Checkout from "pages/AddCourse";
 import NotFound from "pages/NotFound";
 import SignIn from "pages/SignIn";
 import React, { Fragment, useEffect } from "react";
@@ -24,15 +26,15 @@ const App = () => {
     <HashRouter>
       <Switch>
         <Route path="/signin" component={SignIn} />
-        {loggedIn && (
-          <Fragment>
-            <Route path="/" />
-            <Route path="/edit/:cid" />
-            <Route path="/add" />
-          </Fragment>
-        )}
+        {/* {loggedIn && ( */}
+        <Fragment>
+          <Route path="/" />
+          <Route path="/edit/:cid" />
+          <Route path="/add" component={Checkout} />
+        </Fragment>
+        {/* // )} */}
         <Route path="/404" component={NotFound} />
-        <Redirect to="/404" />
+        <Redirect to="/sigin" />
       </Switch>
     </HashRouter>
   );
