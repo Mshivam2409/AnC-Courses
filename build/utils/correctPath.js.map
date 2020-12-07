@@ -1,1 +1,0 @@
-{"version":3,"file":"correctPath.js","sourceRoot":"","sources":["../../src/utils/correctPath.ts"],"names":[],"mappings":";;AAEA,MAAM,WAAW,GAAG,CAAC,IAAuB,EAAE,EAAE;IAC5C,OAAO,GAAG,OAAO,CAAC,GAAG,CAAC,QAAQ,KAAK,aAAa,CAAC,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC,GAAG,IAAI,IAAI,EAAE,CAAA;AAC5E,CAAC,CAAA;AAED,kBAAe,WAAW,CAAA"}
