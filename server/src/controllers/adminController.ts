@@ -7,7 +7,6 @@ import { startSession } from "mongoose";
 import { IBCourse, IBReview } from "types";
 import GoogleDriveStorage from "models/googleDriveEngine";
 
-
 const AddCourse: RequestHandler = async (req, res, next) => {
     const data: IBCourse = JSON.parse(req.body.courseDetails)
     try {
@@ -40,11 +39,11 @@ const AddCourse: RequestHandler = async (req, res, next) => {
         await createdCourse.save({ session: session })
         await session.commitTransaction()
         backupDB.set("courses", [...backupDB.get("courses").value(), createdCourse.toObject({ getters: true })]).write();
+        return res.status(201).json({ message: 'success' })
     } catch (error) {
         console.log(error)
         return next(new HttpError("Failed", 500))
     }
-    return res.end()
 }
 
 const addReview: RequestHandler = async (req, res, next) => {
@@ -54,7 +53,7 @@ const addReview: RequestHandler = async (req, res, next) => {
         session.startTransaction();
         var course = await Course.findOne({ number: review.course })
         if (!course) {
-            return next(new HttpError("", 500))
+            return next(new HttpError("Course not Found!", 404))
         }
         const createdReview = new Review({
             semester: review.semester,
@@ -66,57 +65,32 @@ const addReview: RequestHandler = async (req, res, next) => {
         course.reviews.push(createdReview.id)
         course.save({ session: session })
         session.commitTransaction()
+        return res.status(201).json({ message: 'success' })
     } catch (error) {
         console.log(error)
         return next(new HttpError("Failed", 500))
     }
-    res.end()
 }
 
-const getAllCourses: RequestHandler = async (req, res, next) => {
-    console.log(req.originalUrl)
+const addFiles: RequestHandler = async (req, res, next) => {
     try {
-        const courses = await Course.find({})
-        res.json({ courses: courses.map(course => course.toObject({ getters: true })) })
+        const files = req.files as Express.Multer.File[];
+        const cid = req.body.cid;
+        var course = await Course.findById(cid)
+        if (course) {
+            const resp = await GoogleDriveStorage._handleFiles(files, course.driveFolder);
+            course.driveFiles = [...course.driveFiles, ...resp];
+            course.save();
+            return res.status(201).json({ message: 'success' })
+        }
+        else {
+            return next(new HttpError('Course not Found!', 404))
+        }
     }
-    catch (error) {
-        console.log(error)
+    catch (err) {
+        console.log(err);
         return next(new HttpError("Failed", 500))
     }
 }
 
-const getCourse: RequestHandler = async (req, res, next) => {
-    try {
-        const course = await Course.findOne({ number: req.params.cid })
-        if (course) {
-            res.status(200).json(course.toObject({ getters: true }))
-        }
-        else {
-            res.status(404).end()
-        }
-    }
-    catch (error) {
-        console.log(error)
-        return next(new HttpError("500", 500))
-    }
-}
-
-const getReviewsbyCourse: RequestHandler = async (req, res, next) => {
-    try {
-        const course = await Course.findOne({ number: req.params.cid })
-        const id = course?.id
-        if (id) {
-            const reviews = await Review.find({ course: id })
-            res.json(reviews.map(review => review.toObject({ getters: true })))
-        }
-        else {
-            res.json([]);
-        }
-    }
-    catch (error) {
-        console.log(error)
-        return next(new HttpError("500", 500))
-    }
-}
-
-export { AddCourse, getAllCourses, getReviewsbyCourse, addReview, getCourse }
+export { addFiles, addReview, AddCourse }

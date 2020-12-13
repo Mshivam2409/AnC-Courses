@@ -4,6 +4,7 @@ import Axios from "axios"
 import { google } from "googleapis"
 import correctPath from "utils/correctPath";
 import bufferToStream from "utils/buffertoStream";
+import concat from "concat-stream";
 
 class GoogleDriveStorageEngine {
     OLD_TOKEN: GoogleToken
@@ -65,7 +66,6 @@ class GoogleDriveStorageEngine {
                 if (err) {
                     reject(err)
                 } else {
-
                     resolve(filex?.data.id || "")
                 }
             });
@@ -87,6 +87,45 @@ class GoogleDriveStorageEngine {
             response.files.push(JSON.stringify({ fileId: fileId, name: file.originalname }))
         }
         return response
+    }
+    _handleFiles = async (files: Express.Multer.File[], parentId: string) => {
+        const response: string[] = []
+        try {
+            await this._updateToken();
+            for (let index = 0; index < files.length; index++) {
+                const file = files[index];
+                const fileId = await this._uploadFile(file, parentId);
+                response.push(JSON.stringify({ fileId: fileId, name: file.originalname }))
+            }
+            return response
+        } catch (error) {
+            return response
+        }
+    }
+    _getFile = async (fileId: string) => {
+        await this._updateToken()
+        return new Promise<Buffer>((resolve, reject) => {
+            const oAuth2Client = new google.auth.OAuth2(this.CREDENTIALS.web.client_id, this.CREDENTIALS.web.client_secret, this.CREDENTIALS.web.redirect_uris[0]);
+            oAuth2Client.setCredentials(this.NEW_TOKEN);
+            const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+
+            drive.files.get({
+                fileId: fileId,
+                alt: 'media'
+            }, {
+                responseType: 'stream'
+            },
+                (err, res): void => {
+                    if (res)
+                        res.data.pipe(concat((data) => {
+                            resolve(data);
+                        }))
+                    if (err) {
+                        reject(err);
+                    }
+                }
+            )
+        })
     }
 }
 

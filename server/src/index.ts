@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import express from "express"
+import express, { ErrorRequestHandler } from "express"
 import path from "path"
 import { config } from "dotenv"
 import helmet from "helmet"
@@ -9,21 +9,12 @@ config();
 import router from "routes/router";
 import backupDB from "backup";
 import rateLimiterMiddleware from "middleware/DDoS.protector";
+import errorController from "controllers/errorController"
+import corsController from "middleware/setCorsHeaders"
 
 const app = express();
 
-app.use(rateLimiterMiddleware, helmet({ contentSecurityPolicy: false }))
-
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
-    );
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-    res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
-    next();
-});
+app.use(rateLimiterMiddleware, helmet({ contentSecurityPolicy: false }), corsController)
 
 app.use("/api", router)
 
@@ -41,12 +32,14 @@ if (process.env.NODE_ENV === "production") {
 }
 // AnC2020
 
+app.use(errorController)
+
 mongoose
     .connect(process.env.MONGO_URL as string)
     .then(() => {
         app.listen(process.env.PORT || 5000, () => {
             console.log(
-                "Listening on " + ", port "
+                "Listening on " + 5000 + "port "
             );
             backupDB.read();
         });
