@@ -1,7 +1,8 @@
-import { Collapse, Result, Spin } from "antd";
+import { Collapse, Result, Spin, Typography } from "antd";
 import Axios, { AxiosResponse } from "axios";
 import { Fragment, useState } from "react";
 import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import { IReview } from "types";
 import url from "utils/api";
 
@@ -34,7 +35,7 @@ const Reviews = (props: { course: string }) => {
   const { Panel } = Collapse;
 
   return (
-    <Fragment>
+    <Spin tip="Loading....." spinning={loading}>
       {!loading && (
         <Collapse accordion>
           {reviews.map((review) => {
@@ -43,7 +44,9 @@ const Reviews = (props: { course: string }) => {
                 header={`${review.semester} Prof : ${review.instructor}`}
                 key={review._id}
               >
-                <p>{review.grading}</p>
+                <Typography>
+                  <ReactMarkdown children={review.grading} />
+                </Typography>
               </Panel>
             );
           })}
@@ -54,9 +57,9 @@ const Reviews = (props: { course: string }) => {
         <Result
           title="There are no reviews!"
           // extra={
-          //   <Button type="primary" key="console">
-          //     Go Console
-          //   </Button>
+          // <Button type="primary" key="console">
+          //   Go Console
+          // </Button>
           // }
         />
       )}
@@ -68,7 +71,7 @@ const Reviews = (props: { course: string }) => {
         />
       )}
 
-      {loading && (
+      {/* {loading && (
         <div
           style={{
             justifyItems: "center",
@@ -79,8 +82,8 @@ const Reviews = (props: { course: string }) => {
         >
           <Spin tip="Loading....." />
         </div>
-      )}
-    </Fragment>
+      )} */}
+    </Spin>
   );
 };
 

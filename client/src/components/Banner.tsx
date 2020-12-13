@@ -33,12 +33,12 @@ const Banner = () => {
         </li>
         <li className="layer" data-depth="0.30">
           <div className="text">
-            <p className="sub-title">Courses Reviews.....</p>
+            <p className="sub-title">Courses Reviews</p>
           </div>
         </li>
         <li className="layer" data-depth="0.40">
           <div className="text">
-            <h1>Course Portal</h1>
+            <h1>Courses</h1>
           </div>
         </li>
         <li className="layer" data-depth="0.42">

@@ -2,7 +2,7 @@
 let scene = document.getElementById("scene");
 let parallaxInstance = new Parallax(scene);
 $("li.layer .text .sub-title").typed({
-  strings: ["Course material......", "Course Reviwes......"],
+  strings: ["Course Information", "Course Reviews", "Study Material"],
   loop: true,
   contentType: "html",
   showCursor: false,

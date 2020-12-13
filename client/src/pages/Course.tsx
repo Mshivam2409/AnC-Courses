@@ -7,6 +7,7 @@ import {
   Descriptions,
   Typography,
   Divider,
+  Spin,
 } from "antd";
 import Axios, { AxiosError, AxiosResponse } from "axios";
 import Reviews from "components/Reviews";
@@ -14,13 +15,14 @@ import { useHistory, useParams } from "react-router-dom";
 import url from "utils/api";
 import { ICourse } from "types";
 import ReactMarkdown from 'react-markdown'
+import Files from "components/Files";
 
 const { TabPane } = Tabs;
 
 const Course = () => {
   const route: any = useParams();
   const history = useHistory();
-  const [course, setCourse] = useState<ICourse | null>(null);
+  const [course, setCourse] = useState<ICourse>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   useEffect(() => {
@@ -37,22 +39,23 @@ const Course = () => {
         console.log(response);
       })
       .catch((reason: AxiosError) => {
-        if (reason.response) history.push(`/error/${reason.response?.status}`);
-        else history.push(`/error/${500}`);
+        if (reason.response)history.push(`/error/${reason.response.status}`);
+        else {history.push(`/error/${500}`)};
       });
   }, [route.cid]);
 
   return (
+    <Spin spinning={loading} tip={"Loading..."}>
     <PageHeader
       className="site-page-header-responsive"
       onBack={() => window.history.back()}
-      title={`${course?.number}   ${course?.title}`}
+      title={`${course?.number || " "}   ${course?.title || " "}` }
       extra={
         [
           // <Button key="3">Operation</Button>,
           // <Button key="2">Operation</Button>,
           // <Button key="1" type="primary">
-          //   Primary
+          //   Mookit
           // </Button>,
         ]
       }
@@ -60,12 +63,14 @@ const Course = () => {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Details" key="1">
             <Divider />
-            <Typography> <ReactMarkdown children={course?.contents as string}/> </Typography>
+            <Typography> <ReactMarkdown children={course?.contents || ""}/> </Typography>
           </TabPane>
           <TabPane tab="Reviews" key="2">
             <Reviews course={route.cid} />
           </TabPane>
-          <TabPane tab="Files" key="3" />
+          <TabPane tab="Files" key="3" >
+            <Files files={course?.driveFiles || []}/>
+            </TabPane>
         </Tabs>
       }
     >
@@ -76,7 +81,7 @@ const Course = () => {
             {/* <Descriptions.Item label="Created">Lili Qu</Descriptions.Item> */}
             <Descriptions.Item label="Compiled By">
               <a href="#home" onClick={(e) => e.preventDefault()}>
-                {course?.author}
+                {course?.author || ""}
               </a>
             </Descriptions.Item>
             <Descriptions.Item label="Department">{course?.dept}</Descriptions.Item>
@@ -96,16 +101,16 @@ const Course = () => {
           >
             <Statistic
               title="Credits"
-              value={course?.credits}
+              value={course?.credits || ""}
               style={{
                 marginRight: 32,
               }}
             />
-            <Statistic title="Offered" value={course?.offered} />
+            <Statistic title="Offered" value={course?.offered || ""} />
           </div>
         </div>
       </div>
-    </PageHeader>
+    </PageHeader></Spin>
   );
 };
 
