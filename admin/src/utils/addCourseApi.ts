@@ -1,11 +1,11 @@
 import { IBCourse } from "types";
-import url from "utils/api";
+import urlBackend from "config/api";
 
 const addCourse = async (course: IBCourse, author: string) => {
     const data = new FormData();
     data.append('courseDetails', JSON.stringify(course));
     data.append('author', author)
-    const response = await fetch(url("secure/addCourse"), {
+    const response = await fetch(urlBackend("secure/addCourse"), {
         method: "POST",
         body: data,
     })

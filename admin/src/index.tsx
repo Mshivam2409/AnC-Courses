@@ -1,15 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "index.css";
 import App from "App";
-import reportWebVitals from "./reportWebVitals";
+import reportWebVitals from "reportWebVitals";
 import { RecoilRoot } from "recoil";
+import { MuiThemeProvider } from "@material-ui/core";
+import globaltheme from "config/theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <App />
-    </RecoilRoot>
+    <MuiThemeProvider theme={globaltheme}>
+      <RecoilRoot>
+        <App />
+      </RecoilRoot>
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

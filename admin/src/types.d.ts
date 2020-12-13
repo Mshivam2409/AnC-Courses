@@ -12,4 +12,6 @@ export interface IBCourse {
     offered: string
     contents: string
     reviews: Array<IBReview>
+    driveFiles: Array<string>
+    id: string
 }

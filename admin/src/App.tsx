@@ -1,17 +1,14 @@
-import ControlledEditor from "components/Editor";
-import Checkout from "pages/AddCourse";
-import NotFound from "pages/NotFound";
-import SignIn from "pages/SignIn";
-import React, { Fragment, useEffect } from "react";
-import {
-  Switch,
-  Route,
-  Redirect,
-  HashRouter,
-  useHistory,
-} from "react-router-dom";
+import React, { useEffect } from "react";
+import { Switch, Route, Redirect, HashRouter } from "react-router-dom";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import Store from "store";
+import ProtectedRoute from "components/shared/ProtectedRoute";
+import Unauthorized from "pages/Unauthorized";
+import AddCourse from "pages/AddCourse";
+import Dashboard from "pages/Dashboard";
+import NotFound from "pages/NotFound";
+import SignIn from "pages/SignIn";
+import EditCoursePage from "pages/EditCourse";
 
 const App = () => {
   const loggedIn = useRecoilValue(Store.User).loggedIn;
@@ -25,16 +22,14 @@ const App = () => {
   return (
     <HashRouter>
       <Switch>
+        {/* //AnC@2020 */}
         <Route path="/signin" component={SignIn} />
-        {/* {loggedIn && ( */}
-        <Fragment>
-          <Route path="/" />
-          <Route path="/edit/:cid" />
-          <Route path="/add" component={Checkout} />
-        </Fragment>
-        {/* // )} */}
         <Route path="/404" component={NotFound} />
-        <Redirect to="/sigin" />
+        <Route path="/unauthorized" component={Unauthorized} />
+        <ProtectedRoute path="/home" component={Dashboard} />
+        <Route path="/edit/:cid" component={EditCoursePage} />
+        <Route path="/add" component={AddCourse} />
+        <Redirect to="/signin" />
       </Switch>
     </HashRouter>
   );

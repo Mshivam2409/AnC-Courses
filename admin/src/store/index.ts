@@ -1,8 +1,9 @@
-import { FilesToUpload, User } from "store/atoms";
+import { currentCourse, FilesToUpload, User } from "store/atoms";
 
 const Store = {
     FilesToUpload: FilesToUpload,
-    User: User
+    User: User,
+    CurrentCourse: currentCourse
 }
 
 export default Store

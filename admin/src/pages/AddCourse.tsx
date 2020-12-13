@@ -10,9 +10,9 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
-import AddressForm from "components/CourseForm";
-import PaymentForm from "components/Editor";
-import Review from "components/Review";
+import AddressForm from "components/AddCourse/CourseForm";
+import PaymentForm from "components/shared/Editor";
+import Review from "components/AddCourse/Review";
 import { IBCourse } from "types";
 import addCourse from "utils/addCourseApi";
 
@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ["Course Details", "Course Content", "Review and Submit"];
 
-export default function Checkout() {
+const AddCourse = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [courseData, setCourseData] = React.useState<IBCourse>({
@@ -78,6 +78,8 @@ export default function Checkout() {
     offered: "",
     contents: "",
     reviews: [],
+    driveFiles: [],
+    id: "",
   });
 
   const getStepContent = (step: number) => {
@@ -164,4 +166,6 @@ export default function Checkout() {
       </main>
     </React.Fragment>
   );
-}
+};
+
+export default AddCourse;

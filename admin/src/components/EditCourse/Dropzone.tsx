@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+import Axios from "axios";
 import { DropzoneDialog } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import Store from "store";
+import urlBackend from "config/api";
 
 const Dropzone = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [files, setFiles] = useRecoilState(Store.FilesToUpload);
   const resetFiles = useResetRecoilState(Store.FilesToUpload);
-
+  const cid = useRecoilValue(Store.CurrentCourse).id;
   const handleClose = () => {
     resetFiles();
     setOpen(false);
@@ -18,13 +20,13 @@ const Dropzone = () => {
   const handleSave = (files: File[]) => {
     setFiles(files);
     setOpen(false);
+    const data = new FormData();
+    files.forEach((file) => data.append(file.name, file));
+    data.append("cid", cid);
     if (files) {
-      files.forEach((file) => {
-        var objectURL = URL.createObjectURL(file);
-        // arr.push(objectURL);
-        // setArr(arr);
-      });
-      //   props.changeFile(arr);
+      Axios.post(urlBackend("secure/addFiles"), data)
+        .then((resp) => console.log(resp))
+        .catch((error) => console.log(error));
     }
   };
 
@@ -47,16 +49,23 @@ const Dropzone = () => {
         startIcon={<CloudUploadIcon />}
         onClick={handleOpen}
       >
-        Upload Images
+        Upload Files
       </Button>
       <DropzoneDialog
         open={open}
         onSave={handleSave}
-        acceptedFiles={["image/jpeg", "image/png", "image/bmp"]}
+        acceptedFiles={[
+          "application/pdf",
+          "application/msword",
+          "application/vnd.ms-powerpoint",
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "application/vnd.rar",
+          "application/zip",
+        ]}
         showPreviews={true}
         maxFileSize={5000000}
         onClose={handleClose}
-        dialogTitle={"Upload PDF/DOC Files"}
+        dialogTitle={"Upload PDF/DOC/PPT/PPTX/RAR/ZIP Files"}
       />
     </div>
   );
