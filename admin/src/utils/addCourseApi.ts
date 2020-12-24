@@ -1,13 +1,16 @@
 import { IBCourse } from "types";
 import urlBackend from "config/api";
 
-const addCourse = async (course: IBCourse, author: string) => {
+const addCourse = async (course: IBCourse, author: string, token: string) => {
     const data = new FormData();
     data.append('courseDetails', JSON.stringify(course));
     data.append('author', author)
     const response = await fetch(urlBackend("secure/addCourse"), {
         method: "POST",
         body: data,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
     if (!response.ok)
         return {

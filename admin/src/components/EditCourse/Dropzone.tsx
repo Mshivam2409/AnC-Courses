@@ -12,6 +12,7 @@ const Dropzone = () => {
   const [files, setFiles] = useRecoilState(Store.FilesToUpload);
   const resetFiles = useResetRecoilState(Store.FilesToUpload);
   const cid = useRecoilValue(Store.CurrentCourse).id;
+  const token = useRecoilValue(Store.User).token;
   const handleClose = () => {
     resetFiles();
     setOpen(false);
@@ -24,7 +25,11 @@ const Dropzone = () => {
     files.forEach((file) => data.append(file.name, file));
     data.append("cid", cid);
     if (files) {
-      Axios.post(urlBackend("secure/addFiles"), data)
+      Axios.post(urlBackend("secure/addFiles"), data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((resp) => console.log(resp))
         .catch((error) => console.log(error));
     }

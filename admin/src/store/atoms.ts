@@ -15,6 +15,7 @@ const currentCourse = atom<IBCourse>({
         credits: "string,",
         offered: "string",
         contents: "string",
+        dept: '',
         reviews: [],
         driveFiles: []
     }
@@ -28,4 +29,14 @@ const User = atom({
     }
 })
 
-export { FilesToUpload, User, currentCourse }
+const ModalOpen = atom({
+    key: 'MODAL_OPEN',
+    default: false
+})
+
+const Loading = atom({
+    key: 'LOADING',
+    default: false
+})
+
+export { FilesToUpload, User, currentCourse, ModalOpen, Loading }

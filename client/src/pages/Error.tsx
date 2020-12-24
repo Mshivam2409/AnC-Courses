@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Result, Button } from "antd";
 import { NavLink, useHistory, useParams } from "react-router-dom";
+import { useResetRecoilState } from "recoil";
+import { UserState } from "store";
 
 const ErrorPage = (props: any) => {
   const id: any = useParams();
   const history = useHistory();
+  const resetUser = useResetRecoilState(UserState);
+  useEffect(() => resetUser(), []);
   const message = () => {
     switch (id.code) {
       case "404":

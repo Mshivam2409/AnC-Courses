@@ -10,12 +10,10 @@ const ControlledEditor = (props: any) => {
   const onEditorStateChange = (editorState: EditorState) => {
     setEditorState(editorState);
     setMd(draftToMarkdown(convertToRaw(editorState.getCurrentContent())));
-    console.log(md);
     props.set({
       ...props.state,
       contents: draftToMarkdown(convertToRaw(editorState.getCurrentContent())),
     });
-    console.log(props.state);
   };
 
   return (

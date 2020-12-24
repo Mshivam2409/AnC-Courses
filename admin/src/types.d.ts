@@ -14,4 +14,5 @@ export interface IBCourse {
     reviews: Array<IBReview>
     driveFiles: Array<string>
     id: string
+    dept: string
 }

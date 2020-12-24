@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +13,12 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
+import Axios from "axios";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import Store from "store";
+import urlBackend from "config/api";
+import { LinearProgress } from "@material-ui/core";
+import ErrorModal from "components/shared/ErrorModal";
 
 function Copyright() {
   return (
@@ -50,13 +56,37 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
-
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const setUser = useSetRecoilState(Store.User);
+  const setError = useSetRecoilState(Store.ModalOpen);
+  const [text, setText] = useState<string>("");
   const login = () => {
-    history.push("home");
+    setLoading(true);
+    Axios.post(urlBackend("signin"), {
+      username: username,
+      password: password,
+    })
+      .then((resp) => {
+        setUser({
+          loggedIn: true,
+          username: resp.data.username,
+          token: resp.data.token,
+        });
+        history.push("home");
+      })
+      .catch((error) => {
+        setError(true);
+        setText(error.message || "Internal Server Error");
+      });
+    setLoading(false);
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      <ErrorModal title={"An Error Occured"} description={text} />
+      {loading && <LinearProgress color="secondary" />}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -71,11 +101,12 @@ const SignIn = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -87,6 +118,7 @@ const SignIn = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

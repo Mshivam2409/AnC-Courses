@@ -5,16 +5,6 @@ import GoogleDriveStorage from "models/googleDriveEngine";
 import HttpError from "models/httpError";
 import Review from "models/review";
 
-const getAllCourses: RequestHandler = async (req, res, next) => {
-    try {
-        const courses = await Course.find({})
-        return res.json({ courses: courses.map(course => course.toObject({ getters: true })) })
-    }
-    catch (error) {
-        console.log(error)
-        return next(new HttpError("Failed", 500))
-    }
-}
 
 const getCourse: RequestHandler = async (req, res, next) => {
     try {
@@ -87,4 +77,4 @@ const getFile: RequestHandler = async (req, res, next) => {
     }
 }
 
-export { getAllCourses, getReviewsbyCourse, getCourse, searchCourse, getFile }
+export { getReviewsbyCourse, getCourse, searchCourse, getFile }

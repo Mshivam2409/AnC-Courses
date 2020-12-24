@@ -5,8 +5,13 @@ import { useEffect } from "react";
 const Banner = () => {
   useEffect(() => {
     document.body.classList.add("body-banner");
+    const landing = document.createElement("script");
+    landing.src = "static/js/landing.js";
+    landing.async = true;
+    document.body.appendChild(landing);
     return () => {
       document.body.classList.remove("body-banner");
+      document.body.removeChild(landing);
     };
   });
   return (

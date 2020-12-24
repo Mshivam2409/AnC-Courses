@@ -7,6 +7,8 @@ import {
   FileWordOutlined,
   FileZipOutlined,
 } from "@ant-design/icons";
+import { UserState } from "store";
+import { useRecoilValue } from "recoil";
 
 const Files = (props: { files: string[] }) => {
   // const [FileData,setFileData]
@@ -15,6 +17,7 @@ const Files = (props: { files: string[] }) => {
       return JSON.parse(file);
     }
   );
+  const token = useRecoilValue(UserState).token;
   const getIcon = (mime: string) => {
     switch (mime) {
       case "pdf":
@@ -27,6 +30,7 @@ const Files = (props: { files: string[] }) => {
         return <FileUnknownOutlined />;
     }
   };
+
   return (
     <List
       itemLayout="horizontal"
@@ -39,9 +43,10 @@ const Files = (props: { files: string[] }) => {
             )}
             title={
               <a
+                download
                 href={`${url("getFile")}/${item.fileId}?mimeType=${
                   item.name.split(".")[item.name.split(".").length - 1]
-                }`}
+                }&token=${token}`}
               >
                 {item.name}
               </a>

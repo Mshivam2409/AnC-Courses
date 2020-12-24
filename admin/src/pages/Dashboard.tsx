@@ -16,6 +16,7 @@ import Box from "@material-ui/core/Box";
 import { AddOutlined } from "@material-ui/icons";
 import { NavLink } from "react-router-dom";
 import Copyright from "components/shared/Copyright";
+import EditDialog from "components/EditCourse/Dialog";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -68,54 +69,18 @@ const tiers = [
   {
     title: "Edit Course",
     price: "0",
-    description: [
-      "10 users included",
-      "2 GB of storage",
-      "Help center access",
-      "Email support",
-    ],
-    buttonText: "Sign up for free",
+    description: [],
+    buttonText: "Get Started",
     buttonVariant: "outlined",
     link: "/edit/eso207",
   },
   {
     title: "New Course",
     price: "15",
-    description: [
-      "20 users included",
-      "10 GB of storage",
-      "Help center access",
-      "Priority email support",
-    ],
+    description: [],
     buttonText: "Get started",
     buttonVariant: "contained",
     link: "/add",
-  },
-  {
-    title: "Delete Course",
-    price: "30",
-    description: [
-      "50 users included",
-      "30 GB of storage",
-      "Help center access",
-      "Phone & email support",
-    ],
-    buttonText: "Contact us",
-    buttonVariant: "outlined",
-    link: "/",
-  },
-  {
-    title: "Enterprise",
-    price: "30",
-    description: [
-      "50 users included",
-      "30 GB of storage",
-      "Help center access",
-      "Phone & email support",
-    ],
-    buttonText: "Contact us",
-    buttonVariant: "outlined",
-    link: "",
   },
 ];
 
@@ -205,15 +170,18 @@ const Dashboard = () => {
                   </ul>
                 </CardContent>
                 <CardActions>
-                  <NavLink to={tier.link} style={{ width: "100%" }}>
-                    <Button
-                      fullWidth
-                      variant={tier.buttonVariant as any}
-                      color="primary"
-                    >
-                      {tier.buttonText}
-                    </Button>
-                  </NavLink>
+                  {tier.title === "New Course" && (
+                    <NavLink to={tier.link} style={{ width: "100%" }}>
+                      <Button
+                        fullWidth
+                        variant={tier.buttonVariant as any}
+                        color="primary"
+                      >
+                        {tier.buttonText}
+                      </Button>
+                    </NavLink>
+                  )}
+                  {tier.title === "Edit Course" && <EditDialog />}
                 </CardActions>
               </Card>
             </Grid>

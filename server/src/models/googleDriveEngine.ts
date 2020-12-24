@@ -127,6 +127,7 @@ class GoogleDriveStorageEngine {
             )
         })
     }
+    _deleteFile = () => { }
 }
 
 

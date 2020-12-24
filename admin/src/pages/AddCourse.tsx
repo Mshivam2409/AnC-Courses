@@ -15,6 +15,8 @@ import PaymentForm from "components/shared/Editor";
 import Review from "components/AddCourse/Review";
 import { IBCourse } from "types";
 import addCourse from "utils/addCourseApi";
+import Store from "store";
+import { useRecoilValue } from "recoil";
 
 function Copyright() {
   return (
@@ -71,6 +73,7 @@ const steps = ["Course Details", "Course Content", "Review and Submit"];
 const AddCourse = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const token = useRecoilValue(Store.User).token;
   const [courseData, setCourseData] = React.useState<IBCourse>({
     title: "",
     number: "",
@@ -80,6 +83,7 @@ const AddCourse = () => {
     reviews: [],
     driveFiles: [],
     id: "",
+    dept: "",
   });
 
   const getStepContent = (step: number) => {
@@ -89,7 +93,7 @@ const AddCourse = () => {
       case 1:
         return <PaymentForm set={setCourseData} state={courseData} />;
       case 2:
-        return <Review />;
+        return <Review state={courseData} />;
       default:
         throw new Error("Unknown step");
     }
@@ -97,7 +101,7 @@ const AddCourse = () => {
 
   const handleNext = async () => {
     if (activeStep === 2) {
-      const resp = await addCourse(courseData, "Shivam Malhotra");
+      const resp = await addCourse(courseData, "Shivam Malhotra", token);
     }
     setActiveStep(activeStep + 1);
   };
@@ -112,7 +116,7 @@ const AddCourse = () => {
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Company name
+            Add Course
           </Typography>
         </Toolbar>
       </AppBar>
@@ -132,12 +136,7 @@ const AddCourse = () => {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
-                </Typography>
-                <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
+                  Course has been added!.
                 </Typography>
               </React.Fragment>
             ) : (
@@ -155,7 +154,7 @@ const AddCourse = () => {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? "Place order" : "Next"}
+                    {activeStep === steps.length - 1 ? "Submit Course" : "Next"}
                   </Button>
                 </div>
               </React.Fragment>

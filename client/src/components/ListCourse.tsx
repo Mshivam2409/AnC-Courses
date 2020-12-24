@@ -9,9 +9,10 @@ import {
   Col,
   Card,
   Result,
+  message,
 } from "antd";
 import { ICourse } from "types";
-import Axios, { AxiosResponse } from "axios";
+import Axios, { AxiosError, AxiosResponse } from "axios";
 import url from "utils/api";
 import { NavLink } from "react-router-dom";
 
@@ -29,7 +30,11 @@ const ListCourse = () => {
         .then((response) => {
           setCourseList(response.data);
         })
-        .catch(() => {});
+        .catch((reason: AxiosError) => {
+          message.error(
+            reason.response?.data.message || "Failed to Reach Server"
+          );
+        });
   }, [dept, debouncedText]);
   return (
     <Layout style={{ backgroundColor: "white", height: "100vh" }}>

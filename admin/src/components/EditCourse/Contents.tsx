@@ -9,6 +9,8 @@ import {
 } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import { EditOutlined } from "@material-ui/icons";
+import EditorDialog from "./EditorDialog";
+import { Fragment } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,13 +24,31 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Contents = (props: { contents: string }) => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
-    <Typography>
-      <ReactMarkdown children={props.contents} />
-      <Fab className={classes.fab}>
-        <EditOutlined />
-      </Fab>
-    </Typography>
+    <Fragment>
+      <Typography>
+        <ReactMarkdown children={props.contents} />
+        <Fab
+          className={classes.fab}
+          onClick={() => {
+            console.log("Ji");
+            setOpen(true);
+          }}
+        >
+          <EditOutlined />
+        </Fab>
+      </Typography>
+      <EditorDialog
+        open={open}
+        handleClose={handleClose}
+        text={props.contents}
+      />
+    </Fragment>
   );
 };
 

@@ -22,17 +22,6 @@ const AddCourse: RequestHandler = async (req, res, next) => {
             reviews: [],
             author: req.body.author
         })
-        for (let index = 0; index < data.reviews.length; index++) {
-            const review = data.reviews[index];
-            const createdReview = new Review({
-                semester: review.semester,
-                instructor: review.instructor,
-                grading: review.grading,
-                course: createdCourse.id
-            })
-            await createdReview.save({ session: session })
-            createdCourse.reviews = [...createdCourse.reviews, createdReview.id]
-        }
         const googleResponse = await GoogleDriveStorage._handleNewCourse(req.files as Express.Multer.File[], data)
         createdCourse.driveFolder = googleResponse.folderId
         createdCourse.driveFiles = googleResponse.files
@@ -93,4 +82,16 @@ const addFiles: RequestHandler = async (req, res, next) => {
     }
 }
 
-export { addFiles, addReview, AddCourse }
+const EditCourseContent: RequestHandler = async (req, res, next) => {
+    const cid: string = req.params.cid
+    try {
+        await Course.findByIdAndUpdate(cid, { contents: req.body.contents })
+        res.status(201).json({ message: 'success' })
+    } catch (err) {
+        console.log(err)
+        return next(new HttpError("Failed", 500))
+    }
+}
+
+
+export { addFiles, addReview, AddCourse, EditCourseContent }

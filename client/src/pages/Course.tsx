@@ -8,6 +8,7 @@ import {
   Typography,
   Divider,
   Spin,
+  message,
 } from "antd";
 import Axios, { AxiosError, AxiosResponse } from "axios";
 import Reviews from "components/Reviews";
@@ -16,6 +17,8 @@ import url from "utils/api";
 import { ICourse } from "types";
 import ReactMarkdown from 'react-markdown'
 import Files from "components/Files";
+import { useRecoilValue } from "recoil";
+import { UserState } from "store";
 
 const { TabPane } = Tabs;
 
@@ -24,23 +27,22 @@ const Course = () => {
   const history = useHistory();
   const [course, setCourse] = useState<ICourse>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const token = useRecoilValue(UserState).token
   useEffect(() => {
     setLoading(true);
     Axios.get<any, AxiosResponse<ICourse>>(url(`getCourse/${route.cid}`), {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        "Authorization" : `Bearer ${token}`
       },
     })
       .then((response) => {
         setCourse(response.data);
         setLoading(false);
-        console.log(response);
       })
       .catch((reason: AxiosError) => {
-        if (reason.response)history.push(`/error/${reason.response.status}`);
-        else {history.push(`/error/${500}`)};
+        message.error("")
       });
   }, [route.cid]);
 

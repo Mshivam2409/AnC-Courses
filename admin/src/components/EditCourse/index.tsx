@@ -22,6 +22,9 @@ import Store from "store";
 import Contents from "./Contents";
 import Files from "./Files";
 import DeleteForever from "@material-ui/icons/DeleteForever";
+import { LinearProgress } from "@material-ui/core";
+import { Home } from "@material-ui/icons";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -108,6 +111,7 @@ const EditCourse = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const currentCourse = useRecoilValue(Store.CurrentCourse);
+  const loading = useRecoilValue(Store.Loading);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -145,6 +149,13 @@ const EditCourse = () => {
           >
             {currentCourse.title}
           </Typography>
+
+          <IconButton color="inherit">
+            <NavLink to="home">
+              <Home />
+            </NavLink>
+          </IconButton>
+
           <IconButton color="inherit">
             <DeleteForever />
           </IconButton>
@@ -153,6 +164,7 @@ const EditCourse = () => {
 
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        {loading === true && <LinearProgress color="secondary" />}
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}

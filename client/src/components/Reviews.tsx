@@ -1,8 +1,11 @@
-import { Collapse, Result, Spin, Typography } from "antd";
-import Axios, { AxiosResponse } from "axios";
-import { Fragment, useState } from "react";
+import userEvent from "@testing-library/user-event";
+import { Collapse, message, Result, Spin, Typography } from "antd";
+import Axios, { AxiosError, AxiosResponse } from "axios";
+import { useState } from "react";
 import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { UserState } from "store";
 import { IReview } from "types";
 import url from "utils/api";
 
@@ -10,6 +13,8 @@ const Reviews = (props: { course: string }) => {
   const [reviews, setReviews] = useState<Array<IReview>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const token = useRecoilValue(UserState).token
+  const resetUser = useResetRecoilState(UserState)
   useEffect(() => {
     setLoading(true);
     Axios.get<any, AxiosResponse<Array<IReview>>>(
@@ -18,16 +23,17 @@ const Reviews = (props: { course: string }) => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
+          "Authorization":`Bearer ${token}`
         },
       }
     )
       .then((response) => {
         setReviews(response.data);
         setLoading(false);
-        console.log(response);
       })
-      .catch((reason) => {
-        console.log(reason);
+      .catch((reason: AxiosError) => {
+        message.error(reason.response?.data.message || "Failed to Reach Server");
+        resetUser();
         setLoading(false);
         setError(true);
       });
