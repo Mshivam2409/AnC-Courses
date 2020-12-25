@@ -1,0 +1,93 @@
+version: "3"
+services:
+  server:
+    container_name: server
+    restart: always
+    build:
+      context: ./server
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=development
+      - DIR=src
+      - PORT=5000
+      - MONGO_URL=mongodb://mongodb:27017
+      - DATABASE_URL=postgres://postgres:5432
+      - REDIS_URL=redis://redis_db
+      - REDIS_PORT=6379
+      - REDIS_AUTH=REDIS_PASSWORD
+    env_file: ./server/.env
+    command: yarn run dev
+  client:
+    container_name: client
+    restart: always
+    build:
+      context: ./client
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./client:/client
+    working_dir: /client
+    ports:
+      - "3000:3000"
+      - "35729:35729"
+    networks:
+      - app-network
+    stdin_open: true
+    command: yarn run start
+  admin:
+    container_name: admin
+    restart: always
+    build:
+      context: ./admin
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./admin:/admin
+    working_dir: /admin
+    ports:
+      - "3001:3001"
+      - "35729:35729"
+    networks:
+      - app-network
+    stdin_open: true
+    environment:
+      - PORT=3001
+    command: yarn run start
+  mongodb: 
+    container_name: mongodb
+    image: mongo:3.6.21-xenial
+    ports:
+    - "27017:27017"
+    networks:
+      - app-network
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    networks:
+      - app-network
+    command: redis-server --requirepass REDIS_PASSWORD
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    networks:
+      - app-network
+  
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data-volume:
+  node_modules:
+  web-root:
+    driver: local

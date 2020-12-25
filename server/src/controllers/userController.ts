@@ -9,7 +9,6 @@ const ClientSignup: RequestHandler = async (req, res, next) => {
     const userName = req.body.userName
     const password = randomBytes(8).toString('hex')
     try {
-        await User.sync()
         const existingUser = await User.findOne({ where: { userName: userName } })
         if (existingUser) {
             return next(new HttpError('Account already exists! Please check your email for password!', 422))
@@ -41,7 +40,7 @@ const ClientSignin: RequestHandler = async (req, res, next) => {
     const isValidPassword = (existingUser.getDataValue('password') === password)
     if (!isValidPassword)
         return next(new HttpError("Invalid Password!", 403))
-    const token = jwt.sign(existingUser.toJSON(), 'AnC@2020', { expiresIn: '3h' })
+    const token = jwt.sign(existingUser.toJSON(), process.env.SECRET as string, { expiresIn: '3h' })
     res.status(200).json({ message: 'Login Successful', token: token })
 }
 

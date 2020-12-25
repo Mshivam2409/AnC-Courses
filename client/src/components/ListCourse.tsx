@@ -16,7 +16,7 @@ import Axios, { AxiosError, AxiosResponse } from "axios";
 import url from "utils/api";
 import { NavLink } from "react-router-dom";
 
-const depts = ["CSE", "EE", "MTH", "PHY", "ESO", "TA"];
+const depts = ["ART", "BSE", "CE", "CHE", "CHM", "CS","DES","ECO","EE","EEM","ENG","ES","ESC","ESO","IME","PHY","LIF","LT","MBA","ME","MSE","MSO","MTH","NT","PHI","PHY","PSY","SE","SOC","TA"];
 const ListCourse = () => {
   const [text, setText] = useState<string>("");
   const [dept, setDept] = useState<string>("");

@@ -19,10 +19,10 @@ router.get("/wakeup", (req, res, next) => {
 })
 router.post("/signup", jsonParser, ClientSignup)
 router.post("/signin", jsonParser, ClientSignin)
-router.get("/getCourse/:cid", jwt({ secret: 'AnC@2020', algorithms: ['HS256'] }), getCourse)
-router.get("/getReviews/:cid", jwt({ secret: 'AnC@2020', algorithms: ['HS256'] }), getReviewsbyCourse)
+router.get("/getCourse/:cid", jwt({ secret: process.env.SECRET as string, algorithms: ['HS256'] }), getCourse)
+router.get("/getReviews/:cid", jwt({ secret: process.env.SECRET as string, algorithms: ['HS256'] }), getReviewsbyCourse)
 router.get("/getFile/:id", jwt({
-    secret: 'AnC@2020', algorithms: ['HS256'], getToken: function fromHeaderOrQuerystring(req) {
+    secret: process.env.SECRET as string, algorithms: ['HS256'], getToken: function fromHeaderOrQuerystring(req) {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             return req.headers.authorization.split(' ')[1];
         } else if (req.query && req.query.token) {

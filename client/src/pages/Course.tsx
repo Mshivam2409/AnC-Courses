@@ -87,9 +87,9 @@ const Course = () => {
               </a>
             </Descriptions.Item>
             <Descriptions.Item label="Department">{course?.dept}</Descriptions.Item>
-            <Descriptions.Item label="Offered as">
-              OE,ESO
-            </Descriptions.Item>
+            {/* <Descriptions.Item label="Offered as">
+              {course?.offered}
+            </Descriptions.Item> */}
           </Descriptions>
         </div>
         <div className="extra">

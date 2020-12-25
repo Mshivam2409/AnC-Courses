@@ -12,6 +12,7 @@ import rateLimiterMiddleware from "middleware/DDoS.protector";
 import errorController from "controllers/errorController"
 import corsController from "middleware/setCorsHeaders"
 import postgresClient from "postgres"
+import User from "models/user"
 
 const app = express();
 
@@ -35,6 +36,7 @@ mongoose
                     "Listening!"
                 );
                 backupDB.read();
+                User.sync()
             });
         })
     })
