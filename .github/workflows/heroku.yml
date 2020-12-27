@@ -3,9 +3,7 @@ name: Build Container and Push to Heroku
 
 on: 
   push:
-    branches:
-      - master
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
