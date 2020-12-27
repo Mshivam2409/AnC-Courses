@@ -1,4 +1,5 @@
 node_modules/
-src/secure/*
-backup
+src/secure/*.json
+src/secure/*pem
+src/backup/*.json
 .env

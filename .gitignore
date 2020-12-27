@@ -2,3 +2,5 @@ build
 .vscode
 database/.vscode
 database/*.json
+.gitsecret/keys/random_seed
+!*.secret

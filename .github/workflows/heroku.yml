@@ -15,6 +15,10 @@ jobs:
       run: heroku container:login
     - name: Install Typescript 
       run: yarn global add typescript
+    - name: Install Git Secret
+      run: bash .github/workflow/git-secret.sh
+    - name: Decrypt Files
+      run: git-secret reveal
     - name: Compile Typescript
       run: bash build.sh
     - name: Build and push
