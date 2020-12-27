@@ -4,8 +4,7 @@ mkdir -p build/secure
 mkdir -p build/backup
 
 echo $GIT_SECRET_KEY | tr ',' '\n' > private_key.gpg
-gpg --import private_key.gpg
-gpg --import  <(echo "$GITLAB_PRIVATE_KEY | tr ',' '\n'")
+gpg --batch --import private_key.gpg
 git secret reveal
 git secret reveal -p $GIT_SECRET_PASSPHRASE
 
