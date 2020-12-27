@@ -3,7 +3,7 @@ name: Build Container and Push to Heroku
 
 on: 
   push:
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +14,7 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: heroku container:login
     - name: Install Typescript 
-      run: yarn install -g typescript
+      run: yarn global add typescript
     - name: Compile Typescript
       run: bash build.sh
     - name: Build and push
