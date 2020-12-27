@@ -4,6 +4,7 @@ mkdir -p build/secure
 mkdir -p build/backup
 
 cd server/
+yarn install
 yarn run tsc
 cp -a  build/* ../build
 cp -a  src/secure/* ../build/secure
