@@ -1,4 +1,3 @@
-import { randomBytes } from "crypto";
 import { RequestHandler } from "express";
 import HttpError from "models/httpError";
 import User from "models/user";
@@ -7,25 +6,19 @@ import mailer from "utils/mailer";
 
 const ClientSignup: RequestHandler = async (req, res, next) => {
     const userName = req.body.userName
-    const password = randomBytes(8).toString('hex')
     try {
         const existingUser = await User.findOne({ where: { userName: userName } })
-        if (existingUser) {
-            return next(new HttpError('Account already exists! Please check your email for password!', 422))
+        if (!existingUser) {
+            return next(new HttpError('Invalid Username! Please Enter a Valid Username!', 404))
         }
-        const newUser = new User({
-            userName: userName,
-            password: password
-        })
         const mailOptions = {
             from: 'anc.courses@gmail.com', // sender address
             to: `${userName}@iitk.ac.in`, // list of receivers
             subject: 'New User Registration', // Subject line
-            html: `<p>Dear User,<br/>Your password is ${password}. Please keep it safe for all future correspondences.</p>`// plain text body
+            html: `<p>Dear User,<br/>Your password is ${existingUser.getDataValue('password')}. Please keep it safe for all future correspondences.</p>`// plain text body
         };
         await mailer.sendMail(mailOptions)
-        await newUser.save()
-        res.status(201).json({ message: 'Successful Registration!', password: password })
+        res.status(201).json({ message: 'Successful Registration!' })
     } catch (error) {
         console.log(error)
         return next(new HttpError('Internal Server Error', 500))

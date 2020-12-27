@@ -2,7 +2,7 @@ def id_generator(chars,size=6):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def generate(years,chars,con):
-    db = pd.read_json('students.json')
+    db = pd.read_json('students')
     df = pd.DataFrame(columns=['userName','password','createdAt','updatedAt'])
     df['userName'] = df['userName'].append(db[(db.i.str.startswith(tuple(years))) & (db.i.str.len() == 6)]['u'])
     df['password'] = [id_generator(chars=chars) for _ in range(0,len(df['userName']))]
@@ -27,6 +27,3 @@ if __name__ == "__main__":
     except ImportError:
         print('Modules not Installed!')
         exit()
-    
-  
-

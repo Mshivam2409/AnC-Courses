@@ -1,2 +1,5 @@
 build
 build.sh
+.vscode
+database/.vscode
+database/*.json
