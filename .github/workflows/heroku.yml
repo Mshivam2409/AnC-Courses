@@ -16,9 +16,9 @@ jobs:
     - name: Install Typescript 
       run: yarn global add typescript
     - name: Install Git Secret
-      run: bash .github/workflow/git-secret.sh
+      run: bash .gitsecret/install.sh
     - name: Decrypt Files
-      run: git-secret reveal
+      run: git-secret reveal -p ${{ secrets.GIT_SECRET_PASSPHRASE }}
     - name: Compile Typescript
       run: bash build.sh
     - name: Build and push
