@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,7 +8,6 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import AddressForm from "components/AddCourse/CourseForm";
 import PaymentForm from "components/shared/Editor";
@@ -17,19 +16,8 @@ import { IBCourse } from "types";
 import addCourse from "utils/addCourseApi";
 import Store from "store";
 import { useRecoilValue } from "recoil";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { LinearProgress } from "@material-ui/core";
+import Copyright from "components/shared/Copyright";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -74,6 +62,8 @@ const AddCourse = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const token = useRecoilValue(Store.User).token;
+  const [loading, setLoading] = useState(false);
+  const [resp, setResp] = React.useState<string>("");
   const [courseData, setCourseData] = React.useState<IBCourse>({
     title: "",
     number: "",
@@ -100,10 +90,13 @@ const AddCourse = () => {
   };
 
   const handleNext = async () => {
+    setLoading(true);
     if (activeStep === 2) {
       const resp = await addCourse(courseData, "Shivam Malhotra", token);
+      setResp(resp.message);
     }
     setActiveStep(activeStep + 1);
+    setLoading(false);
   };
 
   const handleBack = () => {
@@ -120,6 +113,7 @@ const AddCourse = () => {
           </Typography>
         </Toolbar>
       </AppBar>
+      {loading && <LinearProgress color="secondary" />}
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
@@ -136,7 +130,7 @@ const AddCourse = () => {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Course has been added!.
+                  {resp}
                 </Typography>
               </React.Fragment>
             ) : (
@@ -153,6 +147,7 @@ const AddCourse = () => {
                     color="primary"
                     onClick={handleNext}
                     className={classes.button}
+                    disabled={loading}
                   >
                     {activeStep === steps.length - 1 ? "Submit Course" : "Next"}
                   </Button>

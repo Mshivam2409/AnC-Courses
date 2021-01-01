@@ -25,7 +25,10 @@ export default function PaymentForm(props: any) {
             label="Course Number"
             fullWidth
             onChange={(e) => {
-              props.set({ ...props.state, number: e.target.value });
+              props.set({
+                ...props.state,
+                number: e.target.value.toUpperCase(),
+              });
             }}
           />
         </Grid>
@@ -35,7 +38,7 @@ export default function PaymentForm(props: any) {
             label="Course Department"
             fullWidth
             onChange={(e) => {
-              props.set({ ...props.state, dept: e.target.value });
+              props.set({ ...props.state, dept: e.target.value.toUpperCase() });
             }}
           />
         </Grid>
@@ -46,7 +49,10 @@ export default function PaymentForm(props: any) {
             label="Credits"
             fullWidth
             onChange={(e) => {
-              props.set({ ...props.state, credits: e.target.value });
+              props.set({
+                ...props.state,
+                credits: e.target.value.toUpperCase(),
+              });
             }}
           />
         </Grid>
@@ -71,7 +77,10 @@ export default function PaymentForm(props: any) {
             label="Title"
             fullWidth
             onChange={(e) => {
-              props.set({ ...props.state, title: e.target.value });
+              props.set({
+                ...props.state,
+                title: e.target.value.toUpperCase(),
+              });
             }}
           />
         </Grid>

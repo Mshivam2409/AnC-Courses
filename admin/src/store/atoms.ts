@@ -10,11 +10,11 @@ const currentCourse = atom<IBCourse>({
     key: "CURRENT_COURSE",
     default: {
         id: "",
-        title: "string",
-        number: "strin",
-        credits: "string,",
-        offered: "string",
-        contents: "string",
+        title: "",
+        number: "",
+        credits: "",
+        offered: "",
+        contents: "",
         dept: '',
         reviews: [],
         driveFiles: []
@@ -23,8 +23,8 @@ const currentCourse = atom<IBCourse>({
 const User = atom({
     key: "USER",
     default: {
-        loggedIn: true,
-        username: "string",
+        loggedIn: false,
+        username: "",
         token: ""
     }
 })

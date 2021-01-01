@@ -6,17 +6,30 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import Axios, { AxiosResponse } from "axios";
+import urlBackend from "config/api";
+import { IBCourse } from "types";
 
 export default function EditDialog() {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
+  const [error, setError] = React.useState(false);
+  const history = useHistory();
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    Axios.get(urlBackend(`search/${text.trim().toUpperCase()}`)).then(
+      (resp: AxiosResponse<IBCourse[]>) => {
+        if (resp.data.length === 1) {
+          history.push(`/edit/${resp.data[0].number}`);
+        } else {
+          setError(true);
+        }
+      }
+    );
   };
 
   return (
@@ -43,21 +56,20 @@ export default function EditDialog() {
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="Course Code"
             fullWidth
             onChange={(e) => setText(e.currentTarget.value)}
+            error={error}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={() => setOpen(false)} color="primary">
             Cancel
           </Button>
-          <NavLink to={`/edit/${text.trim().toUpperCase()}`}>
-            <Button onClick={handleClose} color="primary">
-              Edit
-            </Button>
-          </NavLink>
+
+          <Button onClick={handleClose} color="primary">
+            Edit
+          </Button>
         </DialogActions>
       </Dialog>
     </>

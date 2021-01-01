@@ -3,13 +3,21 @@ import Axios from "axios";
 import { DropzoneDialog } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import Store from "store";
 import urlBackend from "config/api";
 
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const Dropzone = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [files, setFiles] = useRecoilState(Store.FilesToUpload);
+  const [opent, setOpenT] = React.useState(false);
+  const setFiles = useSetRecoilState(Store.FilesToUpload);
+  const [message, setMessage] = React.useState("success");
   const resetFiles = useResetRecoilState(Store.FilesToUpload);
   const cid = useRecoilValue(Store.CurrentCourse).id;
   const token = useRecoilValue(Store.User).token;
@@ -30,23 +38,38 @@ const Dropzone = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((resp) => console.log(resp))
-        .catch((error) => console.log(error));
+        .then((resp) => {
+          setOpenT(true);
+          setMessage("success");
+        })
+        .catch((error) => {
+          setOpenT(true);
+          setMessage("error");
+        });
     }
   };
 
   const handleOpen = () => {
     setOpen(true);
-    // setArr([]);
+  };
+
+  const handleCloseT = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenT(false);
   };
 
   return (
     <div>
-      {/* <div className="form-group multi-preview">
-        {(arr || []).map((url) => (
-          <img src={url} alt="..." width="200" height="100" border="3" />
-        ))}
-      </div> */}
+      <Snackbar open={opent} autoHideDuration={6000} onClose={handleCloseT}>
+        <Alert onClose={handleCloseT} severity={message as any}>
+          {message === "success"
+            ? "Files have been added! They will appear after processing!"
+            : "Error! Failed to add files!"}
+        </Alert>
+      </Snackbar>
       <Button
         variant="contained"
         color="primary"
@@ -70,7 +93,7 @@ const Dropzone = () => {
         showPreviews={true}
         maxFileSize={5000000}
         onClose={handleClose}
-        dialogTitle={"Upload PDF/DOC/PPT/PPTX/RAR/ZIP Files"}
+        dialogTitle={"Upload Files(upto 3)"}
       />
     </div>
   );

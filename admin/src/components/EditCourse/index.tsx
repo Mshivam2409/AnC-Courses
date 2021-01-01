@@ -2,19 +2,18 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
+
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
+
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
+
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
+
 import MenuIcon from "@material-ui/icons/Menu";
 import Copyright from "components/shared/Copyright";
 import { useRecoilValue } from "recoil";
@@ -22,9 +21,11 @@ import Store from "store";
 import Contents from "./Contents";
 import Files from "./Files";
 import DeleteForever from "@material-ui/icons/DeleteForever";
-import { LinearProgress } from "@material-ui/core";
+import { Button, LinearProgress } from "@material-ui/core";
 import { Home } from "@material-ui/icons";
 import { NavLink } from "react-router-dom";
+import Reviews from "./Reviews";
+import AddReviewDialog from "./AddReviewDialog";
 
 const drawerWidth = 240;
 
@@ -110,13 +111,11 @@ const useStyles = makeStyles((theme) => ({
 const EditCourse = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [openR, setOpenR] = React.useState(false);
   const currentCourse = useRecoilValue(Store.CurrentCourse);
   const loading = useRecoilValue(Store.Loading);
   const handleDrawerOpen = () => {
     setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -151,8 +150,8 @@ const EditCourse = () => {
           </Typography>
 
           <IconButton color="inherit">
-            <NavLink to="home">
-              <Home />
+            <NavLink to="/home" style={{ textDecoration: "none" }}>
+              <Home style={{ fill: "white" }} />
             </NavLink>
           </IconButton>
 
@@ -181,7 +180,22 @@ const EditCourse = () => {
             </Grid>
             {/* Recent Orders */}
             <Grid item xs={12}>
-              <Paper className={classes.paper}>{/* <Orders /> */}</Paper>
+              <Paper className={classes.paper}>
+                <Reviews cid={currentCourse.number} />
+              </Paper>
+              <Button
+                variant="contained"
+                color="primary"
+                component="span"
+                style={{ marginTop: "4px" }}
+                onClick={() => setOpenR(true)}
+              >
+                Add Review
+              </Button>
+              <AddReviewDialog
+                open={openR}
+                handleClose={() => setOpenR(false)}
+              />
             </Grid>
           </Grid>
           <Box pt={4}>

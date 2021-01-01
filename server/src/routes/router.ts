@@ -33,6 +33,8 @@ router.get("/getFile/:id", jwt({
 }), getFile)
 router.get("/search/:code", redisCache.route({ expire: 5000 }), searchCourse)
 router.post('/secure/signin', jsonParser, Login)
+router.get("/secure/getCourse/:cid", jwt({ secret: publicKey, algorithms: ['RS256'] }), getCourse)
+router.get("/secure/getReviews/:cid", jwt({ secret: publicKey, algorithms: ['RS256'] }), getReviewsbyCourse)
 router.post("/secure/addCourse", multipartParser.any(), jwt({ secret: publicKey, algorithms: ['RS256'] }), AddCourse)
 router.post("/secure/addReview", jsonParser, jwt({ secret: publicKey, algorithms: ['RS256'] }), addReview)
 router.post('/secure/addFiles', multipartParser.any(), jwt({ secret: publicKey, algorithms: ['RS256'] }), addFiles)

@@ -19,7 +19,7 @@ const addCourse = async (course: IBCourse, author: string, token: string) => {
         }
     const responseData = await response.json();
     return {
-        message: responseData,
+        message: responseData.message,
         valid: true
     }
 }

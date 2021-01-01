@@ -1,12 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Typography } from "@material-ui/core";
-import {
-  makeStyles,
-  useTheme,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import { EditOutlined } from "@material-ui/icons";
 import EditorDialog from "./EditorDialog";

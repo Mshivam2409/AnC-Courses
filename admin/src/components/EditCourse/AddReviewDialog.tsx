@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -18,6 +18,7 @@ import Store from "store";
 import ErrorModal from "components/shared/ErrorModal";
 import { IBCourse } from "types";
 import { useHistory } from "react-router-dom";
+import { Grid, TextField } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,11 +39,13 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditorDialog(props: any) {
+export default function AddReviewDialog(props: any) {
   const classes = useStyles();
   const token = useRecoilValue(Store.User).token;
   const [course, setCourse] = useRecoilState(Store.CurrentCourse);
   const [loading, setLoading] = useRecoilState(Store.Loading);
+  const [semester, setSemester] = useState("");
+  const [prof, setProf] = useState("");
   const [error, setError] = React.useState("");
   const [state, setState] = React.useState({
     contents: markdownToDraft(props.text),
@@ -56,9 +59,12 @@ export default function EditorDialog(props: any) {
   const submit = () => {
     setLoading(true);
     Axios.post(
-      urlBackend(`secure/editCourse/${course.id}`),
+      urlBackend(`secure/addReview`),
       {
-        contents: state.contents,
+        course: course.number,
+        semester: semester,
+        instructor: prof,
+        grading: state.contents,
       },
       {
         headers: {
@@ -67,20 +73,6 @@ export default function EditorDialog(props: any) {
       }
     )
       .then((resp) => {
-        Axios.get<any, AxiosResponse<IBCourse>>(
-          urlBackend(`secure/getCourse/${course.number.toUpperCase()}`),
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-          .then((resp) => {
-            setCourse(resp.data);
-          })
-          .catch((error) => {
-            history.push("/404");
-          });
         setLoading(false);
         handleClose();
       })
@@ -111,7 +103,7 @@ export default function EditorDialog(props: any) {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Edit Content
+              Add Review
             </Typography>
             <Button
               autoFocus
@@ -123,6 +115,28 @@ export default function EditorDialog(props: any) {
             </Button>
           </Toolbar>
         </AppBar>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              required
+              label="Instructor"
+              fullWidth
+              onChange={(e) => {
+                setProf(e.currentTarget.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              required
+              label="Semester"
+              fullWidth
+              onChange={(e) => {
+                setSemester(e.currentTarget.value);
+              }}
+            />
+          </Grid>
+        </Grid>
         <ControlledEditor set={setState} state={state} />
       </Dialog>
     </>

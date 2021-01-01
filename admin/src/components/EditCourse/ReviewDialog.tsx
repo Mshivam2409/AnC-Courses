@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditorDialog(props: any) {
+export default function ReviewDialog(props: any) {
   const classes = useStyles();
   const token = useRecoilValue(Store.User).token;
   const [course, setCourse] = useRecoilState(Store.CurrentCourse);
