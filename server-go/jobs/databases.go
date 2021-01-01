@@ -16,5 +16,5 @@ func StartCronJobs() {
 			panic(err)
 		}
 	})
-	c.Start()
+	// c.Start()
 }
