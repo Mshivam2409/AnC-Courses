@@ -5,7 +5,7 @@ import { Router } from "express";
 import redisCache from "middleware/redisCache";
 import multer from "multer";
 import jwt from "express-jwt"
-import { Login } from "controllers/loginController";
+import { ChangePassword, Login, ResetPassword } from "controllers/loginController";
 import { publicKey } from "models/keys";
 import { ClientSignin, ClientSignup } from "controllers/userController";
 
@@ -33,6 +33,8 @@ router.get("/getFile/:id", jwt({
 }), getFile)
 router.get("/search/:code", redisCache.route({ expire: 5000 }), searchCourse)
 router.post('/secure/signin', jsonParser, Login)
+router.post('/secure/resetPassword', jsonParser, ResetPassword)
+router.post('/secure/changePassword', jsonParser, jwt({ secret: publicKey, algorithms: ['RS256'] }), ChangePassword)
 router.get("/secure/getCourse/:cid", jwt({ secret: publicKey, algorithms: ['RS256'] }), getCourse)
 router.get("/secure/getReviews/:cid", jwt({ secret: publicKey, algorithms: ['RS256'] }), getReviewsbyCourse)
 router.post("/secure/addCourse", multipartParser.any(), jwt({ secret: publicKey, algorithms: ['RS256'] }), AddCourse)

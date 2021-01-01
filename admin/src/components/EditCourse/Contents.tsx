@@ -31,7 +31,6 @@ const Contents = (props: { contents: string }) => {
         <Fab
           className={classes.fab}
           onClick={() => {
-            console.log("Ji");
             setOpen(true);
           }}
         >

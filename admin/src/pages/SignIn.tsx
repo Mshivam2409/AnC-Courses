@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Axios, { AxiosError } from "axios";
 import { useSetRecoilState } from "recoil";
 import Store from "store";
@@ -97,7 +97,7 @@ const SignIn = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign In
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -139,9 +139,7 @@ const SignIn = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <NavLink to="/forgot">Forgot password?</NavLink>
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
