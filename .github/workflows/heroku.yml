@@ -3,6 +3,9 @@ name: Heroku Container Registry
 
 on: 
   push:
+    branches:
+      - main
+      - alpha_v2
 
 jobs:
   build:
