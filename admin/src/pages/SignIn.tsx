@@ -65,8 +65,8 @@ const SignIn = () => {
   const login = () => {
     setLoading(true);
     Axios.post(urlBackend("secure/signin"), {
-      username: username,
-      password: password,
+      username: username.trim(),
+      password: password.trim(),
     })
       .then((resp) => {
         setUser({
@@ -134,6 +134,7 @@ const SignIn = () => {
               color="primary"
               className={classes.submit}
               onClick={login}
+              disabled={loading}
             >
               Sign In
             </Button>

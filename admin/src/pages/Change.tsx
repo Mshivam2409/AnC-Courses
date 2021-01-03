@@ -36,9 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Change() {
   const classes = useStyles();
-  const params: { token: string } = useParams();
+  const params: { token: string; username: string } = useParams();
   const history = useHistory();
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const submit = () => {
@@ -46,7 +45,7 @@ export default function Change() {
     Axios.post(
       urlBackend("secure/changePassword"),
       {
-        username: username.trim(),
+        username: params.username.trim(),
         password: password.trim(),
       },
       {
@@ -72,18 +71,6 @@ export default function Change() {
           Change Password
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-            onChange={(e) => setUsername(e.currentTarget.value)}
-          />
           <TextField
             variant="outlined"
             margin="normal"

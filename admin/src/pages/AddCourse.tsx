@@ -18,6 +18,7 @@ import Store from "store";
 import { useRecoilValue } from "recoil";
 import { LinearProgress } from "@material-ui/core";
 import Copyright from "components/shared/Copyright";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -64,6 +65,7 @@ const AddCourse = () => {
   const token = useRecoilValue(Store.User).token;
   const [loading, setLoading] = useState(false);
   const [resp, setResp] = React.useState<string>("");
+  const history = useHistory();
   const [courseData, setCourseData] = React.useState<IBCourse>({
     title: "",
     number: "",
@@ -93,7 +95,8 @@ const AddCourse = () => {
     setLoading(true);
     if (activeStep === 2) {
       const resp = await addCourse(courseData, "Shivam Malhotra", token);
-      setResp(resp.message);
+      setResp(resp.message + "Redirecting to home!");
+      setTimeout(() => history.push("/home"), 5000);
     }
     setActiveStep(activeStep + 1);
     setLoading(false);

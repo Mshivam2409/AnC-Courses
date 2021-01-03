@@ -28,7 +28,7 @@ const App = () => {
         <Route path="/404" component={NotFound} />
         <Route path="/signin" component={SignIn} />
         <Route path="/unauthorized" component={Unauthorized} />
-        <Route path="/change/:token" component={Change} />
+        <Route path="/change/:token/:username" component={Change} />
         <ProtectedRoute path="/home" component={Dashboard} />
         <ProtectedRoute path="/edit/:cid" component={EditCoursePage} />
         <ProtectedRoute path="/add" component={AddCourse} />
