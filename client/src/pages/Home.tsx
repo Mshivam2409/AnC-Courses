@@ -1,12 +1,15 @@
 import Banner from "components/Banner";
 import { ArrowDownOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { UserState } from "store";
 
 const Home = () => {
   const loggedIn = useRecoilValue(UserState).loggedIn;
+  useEffect(() => {
+    window.document.title = `Courses | AnC`;
+  });
   return (
     <div>
       <Banner />

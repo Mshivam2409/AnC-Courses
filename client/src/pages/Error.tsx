@@ -9,6 +9,9 @@ const ErrorPage = (props: any) => {
   const history = useHistory();
   const resetUser = useResetRecoilState(UserState);
   useEffect(() => resetUser(), []);
+  React.useEffect(() => {
+    window.document.title = `Error`;
+  });
   const message = () => {
     switch (id.code) {
       case "404":

@@ -40,6 +40,7 @@ const Course = () => {
       .then((response) => {
         setCourse(response.data);
         setLoading(false);
+        window.document.title = `${response.data.title} | Courses | AnC`
       })
       .catch((reason: AxiosError) => {
         message.error("")
@@ -81,11 +82,11 @@ const Course = () => {
           {" "}
           <Descriptions size="small" column={1}>
             {/* <Descriptions.Item label="Created">Lili Qu</Descriptions.Item> */}
-            <Descriptions.Item label="Compiled By">
+            {/* <Descriptions.Item label="Compiled By">
               <a href="#home" onClick={(e) => e.preventDefault()}>
                 {course?.author || ""}
               </a>
-            </Descriptions.Item>
+            </Descriptions.Item> */}
             <Descriptions.Item label="Department">{course?.dept}</Descriptions.Item>
             {/* <Descriptions.Item label="Offered as">
               {course?.offered}

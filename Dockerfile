@@ -4,4 +4,6 @@ WORKDIR /build
 ADD ./build ./
 ENV NODE_ENV production
 RUN yarn install --prod
-CMD ["yarn","start"]
+RUN yarn install -g pm2
+RUN pm2 link imvx6q7wmaeel5i ocs6wng2zq5k5o2
+CMD ["yarn","run","pm2"]

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "App.css";
-import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import ErrorPage from "pages/Error";
 import Course from "pages/Course";
 import Home from "pages/Home";
@@ -24,7 +24,7 @@ const App = () => {
     Axios.get(url("wakeup")).then(() => console.log("Connection Success"));
   }, []);
   return (
-    <HashRouter>
+    <BrowserRouter basename="/courses">
       <Switch>
         <Route path="/home" component={Home} />
         <Route path="/signin" component={SignIn} />
@@ -34,7 +34,7 @@ const App = () => {
         <Route path="/error/:code" component={ErrorPage} />
         <Redirect to="/home" />
       </Switch>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 

@@ -2,6 +2,9 @@ import SignUpForm from "components/SignUpForm";
 import React from "react";
 
 const SignUp = () => {
+  React.useEffect(() => {
+    window.document.title = `SignUp | Courses | AnC`;
+  });
   return (
     <div
       className="site-input-group-wrapper"

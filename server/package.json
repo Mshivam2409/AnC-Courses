@@ -8,7 +8,8 @@
     "tsc": "tsc",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn ./src/index.ts --transpileOnly ",
     "prod": "tsc && node ./build/index.js",
-    "start": "NODE_PATH=./ node index.js"
+    "start": "NODE_PATH=./ node index.js",
+    "pm2": "NODE_PATH=./ pm2 start index.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,11 +29,13 @@
     "jsonwebtoken": "^8.5.1",
     "lowdb": "^1.0.0",
     "mongoose": "^5.10.15",
+    "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "nodemailer": "^6.4.17",
     "pg": "^8.5.1",
     "rate-limiter-flexible": "^2.1.13",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
