@@ -9,7 +9,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn ./src/index.ts --transpileOnly ",
     "prod": "tsc && node ./build/index.js",
     "start": "NODE_PATH=./ node index.js",
-    "pm2": "NODE_PATH=./ pm2 start index.js"
+    "pm2": "NODE_PATH=./ pm2-runtime start index.js"
   },
   "author": "",
   "license": "ISC",
