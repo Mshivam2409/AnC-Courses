@@ -5,7 +5,6 @@ mkdir -p build/backup
 
 echo $GIT_SECRET_KEY | tr ',' '\n' > private_key.gpg
 gpg --batch --import private_key.gpg
-git secret reveal
 git secret reveal -p $GIT_SECRET_PASSPHRASE
 
 cd server/
