@@ -3,7 +3,9 @@ module anc
 go 1.13
 
 require (
+	github.com/99designs/gqlgen v0.13.0 // indirect
 	github.com/andybalholm/brotli v1.0.1 // indirect
+	github.com/ansrivas/fiberprometheus/v2 v2.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-openapi/errors v0.19.8 // indirect
 	github.com/go-openapi/runtime v0.19.23 // indirect

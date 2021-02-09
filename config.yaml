@@ -1,0 +1,7 @@
+kratos:
+  access_log: /var/log/kratos/access.log
+  error_log: /var/log/kratos/error.log
+  admin_url: http://127.0.0.1:4433
+  public_url: 
+
+
