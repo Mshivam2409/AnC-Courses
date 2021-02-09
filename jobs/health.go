@@ -10,16 +10,25 @@ import (
 	"github.com/spf13/viper"
 )
 
-//CheckHealth of Kratos, Database, Oathkeeper and NGINX
-func CheckHealth() {
+//CheckHealth of Kratos, Database, Keto,Oathkeeper and NGINX
+func StartHealthCheck() {
 	c := cron.New()
 	// ctx := context.Background()
 
 	c.AddFunc("@hourly", func() {
-		out, _ := exec.Command("ping", viper.GetString("KRATOS_ADMIN_URL"), "-c 5", "-i 3", "-w 10").Output()
+		out, _ := exec.Command("ping", viper.GetString("KRATOS_PING_URL"), "-c 5", "-i 3", "-w 10").Output()
 		if strings.Contains(string(out), "Destination Host Unreachable") {
 			fmt.Println("KRATOS DOWN")
 			os.Exit(1)
 		}
 	})
+
+	c.AddFunc("@hourly", func() {
+		out, _ := exec.Command("ping", viper.GetString("OATHKEEPER_PING_URL"), "-c 5", "-i 3", "-w 10").Output()
+		if strings.Contains(string(out), "Destination Host Unreachable") {
+			fmt.Println("KRATOS DOWN")
+			os.Exit(1)
+		}
+	})
+
 }

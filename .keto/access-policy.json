@@ -1,0 +1,26 @@
+[
+  {
+    "subjects": ["admin"],
+    "resources": ["courses", "files"],
+    "actions": ["delete", "create"],
+    "effect": "allow"
+  },
+  {
+    "subjects": ["admin", "user"],
+    "resources": ["courses"],
+    "actions": ["read"],
+    "effect": "allow"
+  },
+  {
+    "subjects": ["admin"],
+    "resources": ["cpanel"],
+    "actions": ["login"],
+    "effect": "allow"
+  },
+  {
+    "subjects": ["admin", "user"],
+    "resources": ["portal"],
+    "actions": ["login"],
+    "effect": "allow"
+  }
+]

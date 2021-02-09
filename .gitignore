@@ -1,0 +1,5 @@
+.gitsecret/keys/random_seed
+!*.secret
+.keto/roles/admin.json
+.keto/roles/user.json
+.oathkeeper/jwks.json
