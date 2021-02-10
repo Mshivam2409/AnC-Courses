@@ -4,10 +4,11 @@ package graph
 // will be copied through when generating and any unknown code will be moved to the end.
 
 import (
-	"anc/graph/generated"
-	"anc/graph/model"
 	"context"
 	"fmt"
+
+	"github.com/Mshivam2409/AnC-Courses/graph/generated"
+	"github.com/Mshivam2409/AnC-Courses/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {

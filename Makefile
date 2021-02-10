@@ -3,3 +3,7 @@ build:
 
 run:
 	go run main.go
+
+buildweb:
+	cd web/
+	yarn run build

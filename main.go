@@ -1,8 +1,9 @@
 package main
 
 import (
-	"anc/graph/generated"
 	"net/http"
+
+	"github.com/Mshivam2409/AnC-Courses/graph/generated"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/ansrivas/fiberprometheus/v2"
