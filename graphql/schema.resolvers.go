@@ -7,8 +7,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Mshivam2409/AnC-Courses/graph/generated"
-	"github.com/Mshivam2409/AnC-Courses/graph/model"
+	"github.com/Mshivam2409/AnC-Courses/graphql/generated"
+	"github.com/Mshivam2409/AnC-Courses/graphql/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {

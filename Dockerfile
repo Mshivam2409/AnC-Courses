@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM golang:latest
 LABEL MAINTAINER="Shivam Malhotra"
 LABEL VERSION="0.1.0"
 
@@ -21,6 +21,7 @@ RUN apt-get install -y gnupg gosu curl ca-certificates zip unzip git zlibc
 RUN apt-get install -y nginx 
 
 # Install ORY Stack
+SHELL ["/bin/bash", "-c"]
 RUN bash <(curl https://raw.githubusercontent.com/ory/kratos/v0.4.6-alpha.1/install.sh) -b . v0.5.0-alpha.1
 RUN mv ./kratos /usr/local/bin/
 
@@ -34,12 +35,13 @@ RUN mv ./keto /usr/local/bin
 RUN mkdir /server
 WORKDIR /server
 COPY ./ ./
+RUN go mod install
 RUN go build main.go
 
 # Install Supervisor
 RUN apt-get install -y supervisor
 RUN mkdir -p /var/log/supervisor
-COPY ./devcontainer/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Run SupervisorD
 CMD ["/usr/bin/supervisord"]
