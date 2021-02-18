@@ -1,7 +1,6 @@
 package googleapis
 
 import (
-	"log"
 	"mime/multipart"
 
 	"github.com/Mshivam2409/AnC-Courses/models"
@@ -12,11 +11,28 @@ import (
 func CreateFile(srv *drive.Service, folderID string, file *multipart.FileHeader) models.File {
 	f, err := file.Open()
 	if err != nil {
-		log.Fatalf("Unable to read file: %v", err)
+		panic("Unable to read file: %v")
 	}
 	driveFile, err := srv.Files.Create(&drive.File{Name: file.Filename, Parents: []string{folderID}}).Media(f).Do()
 	if err != nil {
-		log.Fatalf("Unable to create file: %v", err)
+		panic("Unable to create file: %v")
 	}
 	return models.File{ID: driveFile.DriveId, Name: file.Filename}
+}
+
+// CreateFolder Creates a folder in google drive
+func CreateFolder(srv *drive.Service, folderName string) string {
+	folder, err := srv.Files.Create(&drive.File{MimeType: "application/vnd.google-apps.folder", Name: folderName}).Do()
+	if err != nil {
+		panic("Unable to create folder: %v")
+	}
+	return folder.DriveId
+}
+
+// DeleteFile deletes
+func DeleteFile(srv *drive.Service, fileID string) {
+	err := srv.Files.Delete(fileID).Do()
+	if err != nil {
+		panic("Unable to delete file!")
+	}
 }

@@ -69,8 +69,7 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
-// GetService Return the a google drive service
-func GetService() *drive.Service {
+func getService() *drive.Service {
 	b, err := ioutil.ReadFile("credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
@@ -88,3 +87,6 @@ func GetService() *drive.Service {
 	}
 	return srv
 }
+
+// DriveService sdas
+var DriveService = getService()
