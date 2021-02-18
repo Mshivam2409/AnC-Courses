@@ -13,6 +13,7 @@ require (
 	github.com/go-openapi/validate v0.20.2 // indirect
 	github.com/gofiber/fiber/v2 v2.5.0
 	github.com/google/uuid v1.2.0 // indirect
+	github.com/kamva/mgm/v3 v3.1.0
 	github.com/klauspost/compress v1.11.7 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/ory/kratos-client-go v0.5.4-alpha.1
@@ -25,6 +26,7 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/valyala/fasthttp v1.20.0
 	github.com/vektah/gqlparser/v2 v2.1.0
+	go.mongodb.org/mongo-driver v1.4.6
 	go.opencensus.io v0.22.6 // indirect
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777
 	golang.org/x/oauth2 v0.0.0-20210210192628-66670185b0cd

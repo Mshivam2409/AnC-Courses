@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/Mshivam2409/AnC-Courses/controller"
 	"github.com/Mshivam2409/AnC-Courses/graphql/generated"
 	"github.com/gofiber/fiber/v2"
 	"github.com/valyala/fasthttp/fasthttpadaptor"
@@ -18,6 +19,7 @@ func SetupRoutes(app *fiber.App) {
 		})(ctx.Context())
 		return nil
 	})
-	// api := app.Group("/secure")
-	// api.Post("/")
+	api := app.Group("/secure")
+	api.Post("/course/create", controller.CreateCourse)
+
 }

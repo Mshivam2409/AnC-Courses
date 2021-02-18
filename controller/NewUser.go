@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"fmt"
@@ -8,7 +8,9 @@ import (
 	"github.com/ory/kratos-client-go/models"
 )
 
-func main() {
+// CreateUser Creates a new user using the Kratos Admin API
+// Only Admins should have access to this api
+func CreateUser() {
 	c := client.NewHTTPClientWithConfig(nil, &client.TransportConfig{
 		Host:     "127.0.0.1:4434",
 		BasePath: "/",
