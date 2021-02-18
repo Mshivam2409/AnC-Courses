@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import { isAuthenticated } from "services/auth";
-import "./App.css";
+import "App.css";
+
+import { rules } from "auth/abac";
+import React from "react";
+import { AbacProvider } from "react-abac";
+import { useRecoilValue } from "recoil";
+import Router from "router";
+import { SESSION_STATE } from "store";
 
 const App = () => {
-  useState(()=>{
-    isAuthenticated() && 
-  }) 
+  const { role } = useRecoilValue(SESSION_STATE);
   return (
-    <BrowserRouter
-      basename={process.env.NODE_ENV === "production" ? "/courses" : ""}
-    >
-      <Switch></Switch>
-    </BrowserRouter>
+    <AbacProvider rules={rules} roles={[role]}>
+      <Router />
+    </AbacProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { LoginFlow, RegistrationFlow, PublicApi, SettingsFlow, VerificationFlow, RecoveryFlow } from "@oryd/kratos-client"
+import { LoginFlow, RegistrationFlow, PublicApi, SettingsFlow, VerificationFlow, RecoveryFlow } from "@ory/kratos-client"
 import config from "config/kratos"
 
 export const kratos = new PublicApi({ basePath: config.baseUrl })

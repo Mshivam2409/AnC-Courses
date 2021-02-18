@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
+import { AbacProvider } from "react-abac";
+import { rules } from "auth/abac";
 
 ReactDOM.render(
   <React.StrictMode>
