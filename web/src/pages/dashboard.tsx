@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import "assets/dasboard.css";
 import { secured } from "react-abac";
-import { permissions } from "auth";
+import { permissions } from "services/abac";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -60,6 +60,7 @@ const Dashboard = (props: any) => {
           >
             Bill is a cat.
           </div>
+          {/* <iframe src="http://localhost:3001/.commento/dashboard" /> */}
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©2018 Created by Ant UED

@@ -26,7 +26,8 @@ export enum Role {
     USER = "USER",
     COORDI = "COORDI",
     SECY = "SECY",
-    ANONYMOUS = "ANONYMOUS"
+    ANONYMOUS = "ANONYMOUS",
+    BANNED = "BANNED",
 }
 
 // rules describing what roles have what permissions
