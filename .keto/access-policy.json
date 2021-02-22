@@ -1,26 +1,38 @@
 [
   {
-    "subjects": ["admin"],
+    "subjects": ["admin", "secy", "coordi"],
     "resources": ["courses", "files"],
-    "actions": ["delete", "create"],
+    "actions": ["create", "modify"],
     "effect": "allow"
   },
   {
-    "subjects": ["admin", "user"],
-    "resources": ["courses"],
+    "subjects": ["admin", "coordi"],
+    "resources": ["courses", "files"],
+    "actions": ["delete"],
+    "effect": "allow"
+  },
+  {
+    "subjects": ["admin", "user", "secy", "coordi"],
+    "resources": ["courses", "files"],
     "actions": ["read"],
     "effect": "allow"
   },
   {
-    "subjects": ["admin"],
+    "subjects": ["admin", "secy", "coordi"],
     "resources": ["cpanel"],
     "actions": ["login"],
     "effect": "allow"
   },
   {
-    "subjects": ["admin", "user"],
+    "subjects": ["admin", "user", "secy", "coordi"],
     "resources": ["portal"],
     "actions": ["login"],
+    "effect": "allow"
+  },
+  {
+    "subjects": ["admin", "coordi"],
+    "resources": ["coordi", "secy"],
+    "actions": ["create", "delete"],
     "effect": "allow"
   }
 ]

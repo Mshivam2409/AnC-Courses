@@ -44,6 +44,11 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
+	// appf, err := firebase.NewApp(context.Background(), nil)
+	// if err != nil {
+	// 	log.Fatalf("error initializing app: %v\n", err)
+	// }
+	// appf.
 	app.Use(cors.New())
 	app.Use(recover.New())
 	prometheus := fiberprometheus.New("my-service-name")

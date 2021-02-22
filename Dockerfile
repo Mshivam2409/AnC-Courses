@@ -2,6 +2,14 @@ FROM golang:latest
 LABEL MAINTAINER="Shivam Malhotra"
 LABEL VERSION="0.1.0"
 
+# Build the server
+RUN mkdir /server
+WORKDIR /server
+COPY ./ ./
+RUN make install
+
+FROM nginx:mainline-alpine
+COPY --from=0 /server/bin/main /main
 RUN apt-get clean && apt-get update 
 
 # Initialize Locale and TZ
@@ -15,10 +23,7 @@ ENV LANG=en_US.UTF-8
 ENV LC_CTYPE=en_US.UTF-8
 RUN locale-gen en_US.UTF-8 
 
-RUN apt-get install -y gnupg gosu curl ca-certificates zip unzip git zlibc
-
-# Install NGINX
-RUN apt-get install -y nginx 
+RUN apt-get install -y gnupg gosu curl ca-certificates 
 
 # Install ORY Stack
 SHELL ["/bin/bash", "-c"]
@@ -31,12 +36,6 @@ RUN  mv ./oathkeeper /usr/local/bin/
 RUN bash <(curl https://raw.githubusercontent.com/ory/keto/master/install.sh) -b . v0.5.7-alpha.1
 RUN mv ./keto /usr/local/bin
 
-# Build the server
-RUN mkdir /server
-WORKDIR /server
-COPY ./ ./
-RUN go mod install
-RUN go build main.go
 
 # Install Supervisor
 RUN apt-get install -y supervisor

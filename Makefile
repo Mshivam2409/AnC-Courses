@@ -15,3 +15,7 @@ buildweb:
 purge:
 	rm -rf ./bin
 	rm -rf ./web/build
+
+install
+	go mod download
+	go build -o bin/main main.go

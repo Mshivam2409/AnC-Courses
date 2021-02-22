@@ -7,6 +7,7 @@ require (
 	github.com/99designs/gqlgen v0.13.0
 	github.com/andybalholm/brotli v1.0.1 // indirect
 	github.com/ansrivas/fiberprometheus/v2 v2.1.1
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-openapi/errors v0.20.0 // indirect
 	github.com/go-openapi/runtime v0.19.26 // indirect
@@ -16,6 +17,7 @@ require (
 	github.com/kamva/mgm/v3 v3.1.0
 	github.com/klauspost/compress v1.11.7 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
+	github.com/ory/keto-client-go v0.5.2
 	github.com/ory/kratos-client-go v0.5.4-alpha.1
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1

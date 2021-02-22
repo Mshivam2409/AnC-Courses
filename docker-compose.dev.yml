@@ -1,1 +1,131 @@
-version: "3.2"
+version: "3.7"
+
+services:
+  kratos-migrate:
+    image: oryd/kratos:v0.5.5-alpha.1-sqlite
+    environment:
+      - DSN=postgres://postgres:postgres@kdb:5432/kratos?sslmode=disable
+    volumes:
+      - type: bind
+        source: ./.kratos
+        target: /etc/config/kratos
+    command: -c /etc/config/kratos/.kratos.yml migrate sql -e --yes
+    restart: on-failure
+    networks:
+      - intranet
+
+  # ui-react:
+  #   image: "node:lts-alpine"
+  #   user: "node:node"
+  #   working_dir: "/srv"
+  #   command: ["yarn", "start"]
+  #   stdin_open: true
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - intranet
+  #   restart: on-failure
+  #   environment:
+  #     - PATH=/srv/node_modules/.bin:$PATH
+  #     - JWKS_URL=http://localhost:4456/.well-known/jwks.json
+  #     - SECURITY_MODE=jwks
+  #   volumes:
+  #     - "./web/:/srv:delegated"
+
+  kratos:
+    depends_on:
+      - kratos-migrate
+    image: oryd/kratos:v0.5.5-alpha.1-sqlite
+    ports:
+      # - "4433:4433" # public
+      - "4434:4434" # admin
+    restart: unless-stopped
+    environment:
+      - DSN=postgres://postgres:postgres@kdb:5432/kratos?sslmode=disable
+      - LOG_LEAK_SENSITIVE_VALUES=true
+      - SERVE_PUBLIC_BASE_URL=http://127.0.0.1:3001/.ory/kratos/public
+    command: serve -c /etc/config/kratos/.kratos.yml --dev
+    volumes:
+      - type: bind
+        source: ./.kratos
+        target: /etc/config/kratos
+    networks:
+      - intranet
+
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    ports:
+      - "4436:4436"
+      - "4437:4437"
+    networks:
+      - intranet
+
+  nginx:
+    image: "nginx:mainline"
+    depends_on:
+      - kratos
+    ports:
+      - 3001:3001
+    restart: on-failure
+    networks:
+      - intranet
+    volumes:
+      - ./.nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+
+  oathkeeper:
+    image: oryd/oathkeeper:v0.38
+    depends_on:
+      - kratos
+    ports:
+      - 4455:4455
+      - 4456:4456
+    command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
+    environment:
+      - LOG_LEVEL=debug
+      - LOG_LEAK_SENSITIVE_VALUES=true
+    restart: on-failure
+    networks:
+      - intranet
+    volumes:
+      - ./.oathkeeper:/etc/config/oathkeeper
+
+  commento:
+    image: shivammalhotra/commento:v3
+    ports:
+      - 8080:8080
+    environment:
+      COMMENTO_ORIGIN: http://localhost:3001/.commento
+      COMMENTO_CDN_PREFIX: http://localhost:3001/.commento
+      COMMENTO_POSTGRES: postgres://postgres:postgres@db:5432/commento?sslmode=disable
+    networks:
+      - intranet
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: commento
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - intranet
+    volumes:
+      - postgres_data_volume:/var/lib/postgresql/data
+
+  kdb:
+    image: postgres
+    environment:
+      POSTGRES_DB: kratos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - intranet
+    volumes:
+      - kratos_data_volume:/var/lib/postgresql/data
+
+networks:
+  intranet:
+
+volumes:
+  postgres_data_volume:
+  kratos_data_volume:

@@ -1,26 +1,12 @@
 log:
   level: debug
   format: json
+  # leak_sensitive_values: true
 
 serve:
   proxy:
     cors:
-      enabled: true
-      allowed_origins:
-        - "anciitk.in,127.0.0.1"
-      allowed_methods:
-        - POST
-        - GET
-        - PUT
-        - PATCH
-        - DELETE
-      allowed_headers:
-        - Authorization
-        - Content-Type
-      exposed_headers:
-        - Content-Type
-      allow_credentials: true
-      debug: true
+      enabled: false
 
 errors:
   fallback:
@@ -48,7 +34,7 @@ errors:
 access_rules:
   matching_strategy: glob
   repositories:
-    - file:///.oathkeeper/access-rules.yaml
+    - file:///etc/config/oathkeeper/access-rules.yaml
 
 authenticators:
   anonymous:
