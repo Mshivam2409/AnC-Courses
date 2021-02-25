@@ -4,3 +4,4 @@
 .keto/roles/user.json
 .oathkeeper/jwks.json
 bin/main
+.secrets/**

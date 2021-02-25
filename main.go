@@ -1,17 +1,14 @@
 package main
 
 import (
-	"os"
+	"fmt"
 
 	"github.com/Mshivam2409/AnC-Courses/router"
-	"github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -40,10 +37,10 @@ func main() {
 		},
 	})
 	// Setup mgm default config
-	err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
-	if err != nil {
-		os.Exit(1)
-	}
+	// err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+	// if err != nil {
+	// 	log.Fatal("uN")
+	// }
 	// appf, err := firebase.NewApp(context.Background(), nil)
 	// if err != nil {
 	// 	log.Fatalf("error initializing app: %v\n", err)
@@ -54,9 +51,13 @@ func main() {
 	prometheus := fiberprometheus.New("my-service-name")
 	prometheus.RegisterAt(app, "/metrics")
 	app.Use(prometheus.Middleware)
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
+	// viper.SetConfigName("config")
+	// viper.SetConfigType("yaml")
 	router.SetupRoutes(app)
+	print(111)
 	app.Static("/", "html")
-	app.Listen(":3000")
+	err := app.Listen(":5000")
+	if err != nil {
+		fmt.Print(err)
+	}
 }

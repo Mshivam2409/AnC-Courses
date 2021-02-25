@@ -2,19 +2,18 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+import (
+	"github.com/Mshivam2409/AnC-Courses/models"
+	"github.com/hookactions/gqlgen-relay/relay"
+)
+
+type UserConnection struct {
+	Edges      []*UserEdge     `json:"edges"`
+	PageInfo   *relay.PageInfo `json:"pageInfo"`
+	TotalCount *int            `json:"totalCount"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
-}
-
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type UserEdge struct {
+	Node   *models.User `json:"node"`
+	Cursor *string      `json:"cursor"`
 }

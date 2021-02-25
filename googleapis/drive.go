@@ -11,10 +11,12 @@ import (
 func CreateFile(srv *drive.Service, folderID string, file *multipart.FileHeader) models.File {
 	f, err := file.Open()
 	if err != nil {
+		print(11)
 		panic("Unable to read file: %v")
 	}
-	driveFile, err := srv.Files.Create(&drive.File{Name: file.Filename, Parents: []string{folderID}}).Media(f).Do()
+	driveFile, err := srv.Files.Create(&drive.File{Name: file.Filename}).Media(f).Do()
 	if err != nil {
+		print(err.Error(), driveFile)
 		panic("Unable to create file: %v")
 	}
 	return models.File{ID: driveFile.DriveId, Name: file.Filename}

@@ -12,14 +12,14 @@ import (
 
 // SetupRoutes ....
 func SetupRoutes(app *fiber.App) {
-	app.Post("/query", func(ctx *fiber.Ctx) error {
+	app.All("/graphql", func(ctx *fiber.Ctx) error {
 		h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{}))
 		fasthttpadaptor.NewFastHTTPHandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			h.ServeHTTP(writer, request)
 		})(ctx.Context())
 		return nil
 	})
-	api := app.Group("/secure")
-	api.Post("/course/create", controller.CreateCourse)
+	restAPI := app.Group("/secure")
+	restAPI.Post("/file/create", controller.CreateFile)
 
 }

@@ -14,7 +14,7 @@ require (
 	github.com/go-openapi/validate v0.20.2 // indirect
 	github.com/gofiber/fiber/v2 v2.5.0
 	github.com/google/uuid v1.2.0 // indirect
-	github.com/kamva/mgm/v3 v3.1.0
+	github.com/hookactions/gqlgen-relay v0.0.0-20190817160925-716890b1c3b1
 	github.com/klauspost/compress v1.11.7 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/ory/keto-client-go v0.5.2

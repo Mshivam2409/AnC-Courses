@@ -1,7 +1,7 @@
 - id: "ory:kratos:public"
   upstream:
     preserve_host: true
-    url: "http://kratos:4433"
+    url: "http://127.0.0.1:4433"
     strip_path: /.ory/kratos/public
   match:
     url: "http://<**>/.ory/kratos/public/<**>"
@@ -18,29 +18,41 @@
   mutators:
     - handler: noop
 
-- id: "ory:kratos-ss-ui-react:anonymous"
+- id: "fiber:protected"
   upstream:
     preserve_host: true
-    url: "http://kratos-ss-ui-react:4435"
+    url: "http://127.0.0.1:3000"
   match:
-    url: "http://127.0.0.1:4455/<{error,recovery,verify,auth/*,**.css,**.js}{/,}>"
+    url: "http://<**>/.fiber/<{,graphql,files}>"
     methods:
       - GET
+      - POST
   authenticators:
-    - handler: anonymous
-  authorizer:
-    handler: allow
+    - handler: cookie_session
+  authorizers:
+    - handler: keto_engine_acp_ory
+      config:
+        base_url: http://my-keto/
+        required_action: ACCESS
+        required_resource: PUBLIC_GRAPHQL
+        subject:
+        flavor:
   mutators:
-    - handler: noop
+    - handler: id_token
+  errors:
+    - handler: redirect
+      config:
+        to: http://127.0.0.1:3000/auth/login
 
-- id: "ory:kratos-ss-ui-react:protected"
+- id: "fiber:admin"
   upstream:
     preserve_host: true
-    url: "http://kratos-ss-ui-react:4435"
+    url: "http://127.0.0.1:3000"
   match:
-    url: "http://127.0.0.1:4455/<{,callback,debug,dashboard,settings}>"
+    url: "http://<**>/.fiber/admin/<{,graphql}>"
     methods:
       - GET
+      - POST
   authenticators:
     - handler: cookie_session
   authorizer:
@@ -55,7 +67,7 @@
 - id: "commento:public"
   upstream:
     preserve_host: true
-    url: "http://commento:8080"
+    url: "http://127.0.0.1:8080"
     # strip_path: /.commento
   match:
     url: "http://<**>/.commento/<**>"

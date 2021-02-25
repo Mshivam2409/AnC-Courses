@@ -21,8 +21,8 @@ model:
 # Where should the resolver implementations go?
 resolver:
   layout: follow-schema
-  dir: graph
-  package: graph
+  dir: graphql
+  package: graphql
 
 # Optional: turn on use `gqlgen:"fieldName"` tags in your models
 # struct_tag: json
@@ -55,3 +55,9 @@ models:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
+  PageInfo:
+    model: github.com/hookactions/gqlgen-relay/relay.PageInfo
+  Node:
+    model: github.com/hookactions/gqlgen-relay/relay.Node
+  User:
+    model: github.com/Mshivam2409/AnC-Courses/models.User

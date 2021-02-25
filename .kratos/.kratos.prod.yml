@@ -1,0 +1,54 @@
+session:
+  lifespan: 24h
+serve:
+  public:
+    base_url: http://127.0.0.1:3001/.ory/kratos/public
+  admin:
+    base_url: http://127.0.0.1:4434/
+selfservice:
+  default_browser_return_url: http://127.0.0.1:3000/
+  whitelisted_return_urls:
+    - http://127.0.0.1:3000
+  flows:
+    error:
+      ui_url: http://127.0.0.1:3000/error
+    settings:
+      ui_url: http://127.0.0.1:3000/settings
+      privileged_session_max_age: 15m
+    recovery:
+      enabled: true
+      ui_url: http://127.0.0.1:3000/recovery
+    verification:
+      enabled: true
+      ui_url: http://127.0.0.1:3000/verify
+      after:
+        default_browser_return_url: http://127.0.0.1:3000/
+    logout:
+      after:
+        default_browser_return_url: http://127.0.0.1:3000/
+    login:
+      ui_url: http://127.0.0.1:3000/login
+    registration:
+      ui_url: http://127.0.0.1:3000/registration
+      after:
+        password:
+          hooks:
+            - hook: session
+log:
+  level: debug
+  leak_sensitive_values: true
+secrets:
+  cookie:
+    - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+hashers:
+  argon2:
+    parallelism: 1
+    memory: 131072
+    iterations: 2
+    salt_length: 16
+    key_length: 16
+identity:
+  default_schema_url: file:///etc/config/kratos/identity.traits.schema.json
+courier:
+  smtp:
+    connection_uri: smtps://anc.courses@gmail.com:AnC@2020@smtp.gmail.com:465/?skip_ssl_verify=true
