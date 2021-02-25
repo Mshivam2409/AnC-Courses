@@ -1,1 +1,1 @@
-*.tsx linguist-langugage=Other
+*.tsx linguist-detectable=false
