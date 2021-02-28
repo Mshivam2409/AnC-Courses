@@ -1,7 +1,7 @@
 - id: "ory:kratos:public"
   upstream:
     preserve_host: true
-    url: "http://127.0.0.1:4433"
+    url: "http://kratos:4433"
     strip_path: /.ory/kratos/public
   match:
     url: "http://<**>/.ory/kratos/public/<**>"
@@ -18,57 +18,62 @@
   mutators:
     - handler: noop
 
-- id: "fiber:protected"
-  upstream:
-    preserve_host: true
-    url: "http://127.0.0.1:3000"
-  match:
-    url: "http://<**>/.fiber/<{,graphql,files}>"
-    methods:
-      - GET
-      - POST
-  authenticators:
-    - handler: cookie_session
-  authorizers:
-    - handler: keto_engine_acp_ory
-      config:
-        base_url: http://my-keto/
-        required_action: ACCESS
-        required_resource: PUBLIC_GRAPHQL
-        subject:
-        flavor:
-  mutators:
-    - handler: id_token
-  errors:
-    - handler: redirect
-      config:
-        to: http://127.0.0.1:3000/auth/login
+# - id: "fiber:protected"
+#   upstream:
+#     preserve_host: true
+#     url: "http://127.0.0.1:3000"
+#   match:
+#     url: "http://<**>/.fiber/<{,graphql,files}>"
+#     methods:
+#       - GET
+#       - POST
+#   authenticators:
+#     - handler: cookie_session
+#   authorizer:
+#     handler: keto_engine_acp_ory
+#     config:
+#       base_url: http://my-keto/
+#       required_action: ACCESS
+#       required_resource: PUBLIC_GRAPHQL
+#       subject:
+#       flavor:
+#   mutators:
+#     - handler: id_token
+#   errors:
+#     - handler: redirect
+#       config:
+#         to: http://127.0.0.1:3000/auth/login
 
-- id: "fiber:admin"
-  upstream:
-    preserve_host: true
-    url: "http://127.0.0.1:3000"
-  match:
-    url: "http://<**>/.fiber/admin/<{,graphql}>"
-    methods:
-      - GET
-      - POST
-  authenticators:
-    - handler: cookie_session
-  authorizer:
-    handler: allow
-  mutators:
-    - handler: id_token
-  errors:
-    - handler: redirect
-      config:
-        to: http://127.0.0.1:4455/auth/login
+# - id: "fiber:admin"
+#   upstream:
+#     preserve_host: true
+#     url: "http://127.0.0.1:3000"
+#   match:
+#     url: "http://<**>/.fiber/admin/<{[a-zA-Z]+}>/<[a-zA-Z]+>/"
+#     methods:
+#       - GET
+#       - POST
+#   authenticators:
+#     - handler: cookie_session
+#   authorizer:
+#     handler: keto_engine_acp_ory
+#     config:
+#       base_url: http://my-keto/
+#       required_action: "{ { printIndex .MatchContext.RegexpCaptureGroups 1 } }"
+#       required_resource: "{ { printIndex .MatchContext.RegexpCaptureGroups 0 } }"
+#       subject: asdsad
+#       flavor: asdsad
+#   mutators:
+#     - handler: id_token
+#   errors:
+#     - handler: redirect
+#       config:
+#         to: http://127.0.0.1:4455/auth/login
 
 - id: "commento:public"
   upstream:
     preserve_host: true
-    url: "http://127.0.0.1:8080"
-    # strip_path: /.commento
+    url: "http://commento:8080"
   match:
     url: "http://<**>/.commento/<**>"
     methods:

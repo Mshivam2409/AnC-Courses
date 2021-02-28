@@ -1,22 +1,24 @@
 package router
 
 import (
-	"net/http"
+	// handler "github.com/arsmn/gqlgen/graphql/handler"
 
+	// "github.com/99designs/gqlgen/example/federation/reviews/graph"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/Mshivam2409/AnC-Courses/controller"
-	"github.com/Mshivam2409/AnC-Courses/graphql/generated"
+	"github.com/Mshivam2409/AnC-Courses/graph"
+	"github.com/Mshivam2409/AnC-Courses/graph/generated"
 	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp/fasthttpadaptor"
 )
 
 // SetupRoutes ....
 func SetupRoutes(app *fiber.App) {
-	app.All("/graphql", func(ctx *fiber.Ctx) error {
-		h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{}))
-		fasthttpadaptor.NewFastHTTPHandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			h.ServeHTTP(writer, request)
-		})(ctx.Context())
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	gqlHandler := srv.Handler()
+	app.All("/graphql", func(c *fiber.Ctx) error {
+		a := c.Get("Authorizaton")
+		c.Locals("Authorizaton", a)
+		gqlHandler(c.Context())
 		return nil
 	})
 	restAPI := app.Group("/secure")

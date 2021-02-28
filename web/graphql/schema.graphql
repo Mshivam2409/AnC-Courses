@@ -1,9 +1,31 @@
-type Query {
-  viewer: User
+type Course {
+  title: String!
+  number: String!
+  credits: String!
+  offered: String!
+  contents: String!
+  driveFiles: [String!]!
+  id: ID!
+  dept: String!
+  author: String!
+}
 
-  # Fetches an object given its ID
-  node(
-    # The ID of an object
-    id: ID!
-  ): Node
+type Review {
+  id: ID!
+  semester: String!
+  instructor: String!
+  grading: String!
+  course: String!
+  approved: String!
+}
+
+type CourseData {
+  course: Course!
+  reviews: [Review!]!
+}
+
+type Query {
+  getCourses: [Course!]!
+  getCourseData(number: String!): CourseData!
+  getReviewsbyCourse(number: String!): [Review!]!
 }

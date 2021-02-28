@@ -18,8 +18,7 @@ errors:
       config:
         to: http://anciitk.in/courses/login
         when:
-          -
-            error:
+          - error:
               - unauthorized
               - forbidden
             request:
@@ -58,6 +57,12 @@ authenticators:
 authorizers:
   allow:
     enabled: true
+  keto_engine_acp_ory:
+    enabled: true
+    config:
+      base_url: http://my-keto/
+      required_action: ""
+      required_resource: ""
 
 mutators:
   noop:

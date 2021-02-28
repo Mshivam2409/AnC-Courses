@@ -20,110 +20,93 @@ import ReactMarkdown from "react-markdown";
 import Files from "components/Files";
 import { useRecoilValue } from "recoil";
 import Commento from "components/Commento";
+import CollectionsPage from "components/AddReview";
+import { CourseQueryResponse } from "__generated__/CourseQuery.graphql";
+import { IBCourse } from "../constants";
 
 const { TabPane } = Tabs;
 
-const Course = () => {
-  const route: any = useParams();
-  const history = useHistory();
-  const [course, setCourse] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
-  useEffect(() => {
-    setLoading(true);
-    Axios.get<any, AxiosResponse<any>>(`getCourse/${route.cid}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        setCourse(response.data);
-        setLoading(false);
-        window.document.title = `${response.data.title} | Courses | AnC`;
-      })
-      .catch((reason: AxiosError) => {
-        setLoading(false);
-        message.error("");
-      });
-  }, [route.cid]);
-
+const Course = (props: {
+  courseData: CourseQueryResponse["getCourseData"];
+}) => {
+  const { course, reviews } = props.courseData;
   return (
-    <Spin spinning={loading} tip={"Loading..."}>
-      <PageHeader
-        className="site-page-header-responsive"
-        onBack={() => window.history.back()}
-        title={`${course?.number || " "}   ${course?.title || " "}`}
-        extra={
-          [
-            // <Button key="3">Operation</Button>,
-            // <Button key="2">Operation</Button>,
-            // <Button key="1" type="primary">
-            //   Mookit
-            // </Button>,
-          ]
-        }
-        footer={
-          <Tabs defaultActiveKey="1">
-            <TabPane tab="Details" key="1">
-              <Divider />
-              <Typography>
-                {" "}
-                <ReactMarkdown children={course?.contents || ""} />{" "}
-              </Typography>
-            </TabPane>
-            <TabPane tab="Reviews" key="2">
-              <Reviews course={route.cid} />
-            </TabPane>
-            <TabPane tab="Files" key="3">
-              <Files files={course?.driveFiles || []} />
-            </TabPane>
-            <TabPane tab="Discussions" key="4">
-              <Commento id={route.cid} />
-            </TabPane>
-          </Tabs>
-        }
-      >
-        <div className="content">
-          <div className="main">
-            {" "}
-            <Descriptions size="small" column={1}>
-              {/* <Descriptions.Item label="Created">Lili Qu</Descriptions.Item> */}
-              {/* <Descriptions.Item label="Compiled By">
+    <PageHeader
+      className="site-page-header-responsive"
+      onBack={() => window.history.back()}
+      title={`${course?.number || " "}   ${course?.title || " "}`}
+      extra={
+        [
+          // <Button key="3">Operation</Button>,
+          // <Button key="2">Operation</Button>,
+          // <Button key="1" type="primary">
+          //   Mookit
+          // </Button>,
+        ]
+      }
+      footer={
+        <Tabs defaultActiveKey="1">
+          <TabPane tab="Details" key="1">
+            <Divider />
+            <Typography>
+              {" "}
+              <ReactMarkdown children={course?.contents || ""} />{" "}
+            </Typography>
+          </TabPane>
+          <TabPane tab="Reviews" key="2">
+            <Reviews reviews={reviews} />
+          </TabPane>
+          <TabPane tab="Files" key="3">
+            <Files files={course?.driveFiles || []} />
+          </TabPane>
+          <TabPane tab="Discussions" key="4">
+            <Commento id={course.id} />
+          </TabPane>
+        </Tabs>
+      }
+    >
+      <div className="content">
+        <div className="main">
+          {" "}
+          <Descriptions size="small" column={1}>
+            {/* <Descriptions.Item label="Created">Lili Qu</Descriptions.Item> */}
+            <Descriptions.Item label="Compiled By">
               <a href="#home" onClick={(e) => e.preventDefault()}>
                 {course?.author || ""}
               </a>
-            </Descriptions.Item> */}
-              <Descriptions.Item label="Department">
-                {course?.dept}
-              </Descriptions.Item>
-              {/* <Descriptions.Item label="Offered as">
+            </Descriptions.Item>
+            <Descriptions.Item label="Department">
+              {course?.dept}
+            </Descriptions.Item>
+            <Descriptions.Item label="Offered as">
               {course?.offered}
-            </Descriptions.Item> */}
-            </Descriptions>
-          </div>
-          <div className="extra">
-            {" "}
-            <div
+            </Descriptions.Item>
+          </Descriptions>
+        </div>
+        <div className="extra">
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              width: "max-content",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Statistic
+              title="Credits"
+              value={course?.credits || ""}
               style={{
-                display: "flex",
-                width: "max-content",
-                justifyContent: "flex-end",
+                marginRight: 32,
               }}
-            >
-              <Statistic
-                title="Credits"
-                value={course?.credits || ""}
-                style={{
-                  marginRight: 32,
-                }}
-              />
-              <Statistic title="Offered" value={course?.offered || ""} />
-            </div>
+            />
+            <Statistic title="Offered" value={course?.offered || ""} />
           </div>
         </div>
-      </PageHeader>
-    </Spin>
+        <Descriptions.Item>
+          <CollectionsPage />
+        </Descriptions.Item>
+      </div>
+    </PageHeader>
   );
 };
 

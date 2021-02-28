@@ -4,10 +4,7 @@ import logo from "assets/img/logo192.png";
 import useScript from "hooks/useScript";
 
 const Landing = () => {
-  useScript(
-    "https://raw.githubusercontent.com/Mshivam2409/AnC-Courses/alpha_v2/client/public/static/js/landing.js",
-    "root"
-  );
+  useScript("/static/js/landing.min.js", "root");
   return (
     <Fragment>
       <ul id="scene">

@@ -17,7 +17,7 @@ services:
   server:
     depends_on:
       - kratos-migrate
-    image: anc:v6
+    image: anc:v13
     ports:
       # - "4433:4433" # public
       - "3001:3001" # admin

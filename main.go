@@ -37,7 +37,7 @@ func main() {
 		},
 	})
 	// Setup mgm default config
-	// err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+
 	// if err != nil {
 	// 	log.Fatal("uN")
 	// }
@@ -46,13 +46,29 @@ func main() {
 	// 	log.Fatalf("error initializing app: %v\n", err)
 	// }
 	// appf.
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{AllowOrigins: "*"}))
 	app.Use(recover.New())
 	prometheus := fiberprometheus.New("my-service-name")
 	prometheus.RegisterAt(app, "/metrics")
 	app.Use(prometheus.Middleware)
 	// viper.SetConfigName("config")
 	// viper.SetConfigType("yaml")
+	// clientOptions := options.Client().ApplyURI("mongodb+srv://anc:courses@primary.hsesw.mongodb.net/primarydb?retryWrites=true&w=majority")
+
+	// Connect to MongoDB
+	// client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	// if err != nil {
+	// 	print(err.Error())
+	// }
+
+	// err = client.Ping(context.TODO(), nil)
+
+	// if err != nil {
+	// 	print(err.Error())
+	// }
+
+	fmt.Println("Connected to MongoDB!")
 	router.SetupRoutes(app)
 	print(111)
 	app.Static("/", "html")

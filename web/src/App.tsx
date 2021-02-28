@@ -17,7 +17,7 @@ const Login = lazy(() => import("pages/login"));
 const Dashboard = lazy(() => import("pages/dashboard"));
 const Register = lazy(() => import("pages/register"));
 const Landing = lazy(() => import("pages/landing"));
-const Course = lazy(() => import("pages/course"));
+const Course = lazy(() => import("containers/Course"));
 
 const App = () => {
   const { role } = useRecoilValue(SESSION_STATE);
@@ -30,7 +30,7 @@ const App = () => {
         <Switch>
           <Route path="/admin" component={Test} />
           <Suspense fallback={<Loader />}>
-            <Route path="/c/:cid" component={Course} />
+            <Route path="/test/cpanel" component={Dashboard} />
             <PrivateRoute
               path="/cpanel"
               component={Dashboard}
@@ -41,7 +41,7 @@ const App = () => {
 
             <Route path="/login" component={Login} />
             <Route path="/registration" component={Register} />
-            <Route path="/" component={Landing} />
+            <Route path="/" exact component={Landing} />
           </Suspense>
         </Switch>
       </BrowserRouter>

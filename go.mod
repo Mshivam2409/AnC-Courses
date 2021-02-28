@@ -2,8 +2,10 @@ module github.com/Mshivam2409/AnC-Courses
 
 go 1.13
 
+replace github.com/99designs/gqlgen v0.13.0 => github.com/arsmn/gqlgen v0.13.2
+
 require (
-	cloud.google.com/go v0.76.0 // indirect
+	cloud.google.com/go v0.78.0 // indirect
 	github.com/99designs/gqlgen v0.13.0
 	github.com/andybalholm/brotli v1.0.1 // indirect
 	github.com/ansrivas/fiberprometheus/v2 v2.1.1
@@ -14,8 +16,8 @@ require (
 	github.com/go-openapi/validate v0.20.2 // indirect
 	github.com/gofiber/fiber/v2 v2.5.0
 	github.com/google/uuid v1.2.0 // indirect
-	github.com/hookactions/gqlgen-relay v0.0.0-20190817160925-716890b1c3b1
-	github.com/klauspost/compress v1.11.7 // indirect
+	github.com/hookactions/gqlgen-relay v0.0.0-20190817160925-716890b1c3b1 // indirect
+	github.com/klauspost/compress v1.11.8 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/ory/keto-client-go v0.5.2
 	github.com/ory/kratos-client-go v0.5.4-alpha.1
@@ -26,13 +28,14 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.1
-	github.com/valyala/fasthttp v1.20.0
+	github.com/valyala/fasthttp v1.21.0 // indirect
 	github.com/vektah/gqlparser/v2 v2.1.0
+	github.com/xdg/stringprep v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.4.6
-	go.opencensus.io v0.22.6 // indirect
-	golang.org/x/net v0.0.0-20210119194325-5f4716e94777
-	golang.org/x/oauth2 v0.0.0-20210210192628-66670185b0cd
+	go.opencensus.io v0.23.0 // indirect
+	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
+	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
 	google.golang.org/api v0.40.0
-	google.golang.org/genproto v0.0.0-20210212180131-e7f2df4ecc2d // indirect
+	google.golang.org/genproto v0.0.0-20210226172003-ab064af71705 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )

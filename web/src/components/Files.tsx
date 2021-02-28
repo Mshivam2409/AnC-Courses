@@ -10,8 +10,7 @@ import {
 // import { UserState } from "store";
 import { useRecoilValue } from "recoil";
 
-const Files = (props: { files: string[] }) => {
-  // const [FileData,setFileData]
+const Files = (props: { files: readonly string[] }) => {
   const data: Array<{ fileId: string; name: string }> = props.files.map(
     (file) => {
       return JSON.parse(file);

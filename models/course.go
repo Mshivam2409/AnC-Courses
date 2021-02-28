@@ -1,9 +1,11 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 // Course Structure
-type Course struct {
+type MGMCourse struct {
 	ID          string               `bson:"_id,omitempty"`
 	Title       string               `bson:"title"`
 	Number      string               `bson:"number"`
