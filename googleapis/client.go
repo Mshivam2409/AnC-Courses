@@ -63,13 +63,9 @@ func GetService() *drive.Service {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
 	client := getClient(config)
-	// a := drive.NewService(context.Background(),&drive.clien)
 	srv, err := drive.New(client)
 	if err != nil {
 		log.Fatalf("Unable to retrieve Drive client: %v", err)
 	}
 	return srv
 }
-
-// DriveService sdas
-// var DriveService = getService()

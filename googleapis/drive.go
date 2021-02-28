@@ -8,18 +8,16 @@ import (
 )
 
 // CreateFile Creates a file in google drive and return the file id and filename
-func CreateFile(srv *drive.Service, folderID string, file *multipart.FileHeader) models.File {
+func CreateFile(srv *drive.Service, folderID string, file *multipart.FileHeader) (models.File, error) {
 	f, err := file.Open()
 	if err != nil {
-		print(11)
-		panic("Unable to read file: %v")
+		return models.File{}, err
 	}
 	driveFile, err := srv.Files.Create(&drive.File{Name: file.Filename}).Media(f).Do()
 	if err != nil {
-		print(err.Error(), driveFile)
-		panic("Unable to create file: %v")
+		return models.File{}, err
 	}
-	return models.File{ID: driveFile.DriveId, Name: file.Filename}
+	return models.File{ID: driveFile.DriveId, Name: file.Filename}, err
 }
 
 // CreateFolder Creates a folder in google drive

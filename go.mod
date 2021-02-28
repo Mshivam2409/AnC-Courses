@@ -14,15 +14,14 @@ require (
 	github.com/go-openapi/errors v0.20.0 // indirect
 	github.com/go-openapi/runtime v0.19.26 // indirect
 	github.com/go-openapi/validate v0.20.2 // indirect
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofiber/fiber/v2 v2.5.0
 	github.com/google/uuid v1.2.0 // indirect
-	github.com/hookactions/gqlgen-relay v0.0.0-20190817160925-716890b1c3b1 // indirect
 	github.com/klauspost/compress v1.11.8 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/ory/keto-client-go v0.5.2
 	github.com/ory/kratos-client-go v0.5.4-alpha.1
 	github.com/pelletier/go-toml v1.8.1 // indirect
-	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/afero v1.5.1 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -38,4 +37,5 @@ require (
 	google.golang.org/api v0.40.0
 	google.golang.org/genproto v0.0.0-20210226172003-ab064af71705 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
+	gopkg.in/square/go-jose.v2 v2.5.1
 )

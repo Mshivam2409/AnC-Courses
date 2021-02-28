@@ -11,6 +11,7 @@ import (
 	"github.com/Mshivam2409/AnC-Courses/database"
 	"github.com/Mshivam2409/AnC-Courses/graph/generated"
 	"github.com/Mshivam2409/AnC-Courses/models"
+	"github.com/Mshivam2409/AnC-Courses/services"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -21,10 +22,13 @@ func (r *queryResolver) GetCourses(ctx context.Context) ([]*models.Course, error
 
 func (r *queryResolver) GetCourseData(ctx context.Context, number string) (*models.CourseData, error) {
 	i := fmt.Sprintf("%v", ctx.Value("Authorizaton"))
-	print(i)
+	a, err := services.IsAuthorized(i, "read", "course")
+	if !a {
+		return &models.CourseData{}, err
+	}
 	c := &models.MGMCourse{}
 	filter := bson.D{{Key: "number", Value: number}}
-	err := database.MongoClient.Collection("courses").FindOne(context.TODO(), filter).Decode(c)
+	err = database.MongoClient.Collection("courses").FindOne(context.TODO(), filter).Decode(c)
 	if err != nil {
 		print(err.Error())
 	}

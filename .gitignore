@@ -5,3 +5,4 @@
 .oathkeeper/jwks.json
 bin/main
 .secrets/**
+!.secrets/*.secret
