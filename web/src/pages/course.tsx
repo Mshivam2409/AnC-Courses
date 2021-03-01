@@ -1,29 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { CourseQueryResponse } from "__generated__/CourseQuery.graphql";
 import {
-  PageHeader,
-  Tabs,
-  Button,
-  Statistic,
   Descriptions,
-  Typography,
   Divider,
-  Spin,
-  message,
+  PageHeader,
+  Statistic,
+  Tabs,
+  Typography,
 } from "antd";
-
-import Axios, { AxiosError, AxiosResponse } from "axios";
+import CollectionsPage from "components/AddReview";
+import Commento from "components/Commento";
+import Files from "components/Files";
 import Reviews from "components/Reviews";
-import { useHistory, useParams } from "react-router-dom";
+import React from "react";
+import ReactMarkdown from "react-markdown";
+
 // import url from "utils/api";
 // import { ICourse } from "types";
-import ReactMarkdown from "react-markdown";
-import Files from "components/Files";
-import { useRecoilValue } from "recoil";
-import Commento from "components/Commento";
-import CollectionsPage from "components/AddReview";
-import { CourseQueryResponse } from "__generated__/CourseQuery.graphql";
-import { IBCourse } from "../constants";
-
 const { TabPane } = Tabs;
 
 const Course = (props: {

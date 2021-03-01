@@ -13,9 +13,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// CreateFile sdfs
 func CreateFile(c *fiber.Ctx) error {
 	d := googleapis.GetService()
-	n, err := strconv.Atoi(c.FormValue("number"))
+	n, err := strconv.Atoi(c.FormValue("length"))
 	cno := c.FormValue("course")
 	if err != nil {
 		return &fiber.Error{Code: 422, Message: "Length of files must be a number"}
@@ -26,7 +27,7 @@ func CreateFile(c *fiber.Ctx) error {
 		if err != nil {
 			return &fiber.Error{Code: 422, Message: "Unable to process file!"}
 		}
-		r, err := googleapis.CreateFile(d, "", f)
+		r, err := d.CreateFile("", f)
 		if err != nil {
 			return &fiber.Error{Code: 422, Message: "Unable to upload file!"}
 		}

@@ -18,6 +18,7 @@ const Dashboard = lazy(() => import("pages/dashboard"));
 const Register = lazy(() => import("pages/register"));
 const Landing = lazy(() => import("pages/landing"));
 const Course = lazy(() => import("containers/Course"));
+const Search = lazy(() => import("pages/search"));
 
 const App = () => {
   const { role } = useRecoilValue(SESSION_STATE);
@@ -37,7 +38,8 @@ const App = () => {
               loaderComponent={Loader}
               routeRedirect="/"
             />
-            <Route path="/c/:cid" component={Course} />
+            <Route path="/course/:cid" component={Course} />
+            <Route path="/search" component={Search} />
 
             <Route path="/login" component={Login} />
             <Route path="/registration" component={Register} />

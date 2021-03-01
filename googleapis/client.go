@@ -51,7 +51,7 @@ func tokenFromFile(file string) (*oauth2.Token, error) {
 	return tok, err
 }
 
-func GetService() *drive.Service {
+func GetService() *DriveClient {
 	b, err := ioutil.ReadFile(".secrets/credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
@@ -67,5 +67,5 @@ func GetService() *drive.Service {
 	if err != nil {
 		log.Fatalf("Unable to retrieve Drive client: %v", err)
 	}
-	return srv
+	return &DriveClient{srv}
 }

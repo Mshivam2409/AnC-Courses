@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Radio } from "antd";
+import { Button, Modal, Form, Input, Radio, Cascader } from "antd";
+import { offerings } from "../constants";
 
 interface Values {
   title: string;
@@ -57,16 +58,48 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input type="textarea" />
+          <Input.TextArea />
         </Form.Item>
         <Form.Item
           name="modifier"
           className="collection-create-form_last-form-item"
         >
-          <Radio.Group>
-            <Radio value="public">Public</Radio>
-            <Radio value="private">Private</Radio>
-          </Radio.Group>
+          {/* <Cascader
+            options={[
+              {
+                value: "zhejiang",
+                label: "Zhejiang",
+                children: [
+                  {
+                    value: "hangzhou",
+                    label: "Hangzhou",
+                    children: [
+                      {
+                        value: "xihu",
+                        label: "West Lake",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                value: "jiangsu",
+                label: "Jiangsu",
+                children: [
+                  {
+                    value: "nanjing",
+                    label: "Nanjing",
+                    children: [
+                      {
+                        value: "zhonghuamen",
+                        label: "Zhong Hua Men",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ]} */}
+          {/* /> */}
         </Form.Item>
       </Form>
     </Modal>

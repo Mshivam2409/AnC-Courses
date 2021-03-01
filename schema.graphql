@@ -10,6 +10,16 @@ type Course {
   author: String!
 }
 
+input NewCourse {
+  title: String!
+  number: String!
+  credits: String!
+  offered: String!
+  contents: String!
+  dept: String!
+  author: String!
+}
+
 type Review {
   id: ID!
   semester: String!
@@ -24,8 +34,31 @@ type CourseData {
   reviews: [Review!]!
 }
 
+input SearchParams {
+  identifier: String!
+}
+
 type Query {
-  getCourses: [Course!]!
   getCourseData(number: String!): CourseData!
   getReviewsbyCourse(number: String!): [Review!]!
+  searchCourses(params: SearchParams): [Course!]!
+  searchUsers(params: SearchParams): [User!]!
+}
+
+type Response {
+  ok: Boolean!
+  message: String!
+}
+
+type User {
+  firstName: String!
+  lastName: String!
+  email: String!
+  rollNo: String!
+  banned: Boolean!
+  role: String!
+}
+
+type Mutation {
+  addCourse(course: NewCourse!): Response
 }

@@ -2,6 +2,10 @@ kratos:
   access_log: /var/log/kratos/access.log
   error_log: /var/log/kratos/error.log
   admin_url: http://127.0.0.1:4433
-  public_url: 
+  public_url: http://127.0.0.1:3001/.ory/kratos/public
 
-
+oathkeeper:
+  access_log: /var/log/oathkeeper/access.log
+  error_log: /var/log/oathkeeper/error.log
+  decision_url: http://127.0.0.1:4454
+  gateway_url: http://127.0.0.1:4455

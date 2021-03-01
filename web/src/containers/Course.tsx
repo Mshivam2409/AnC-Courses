@@ -39,6 +39,7 @@ const CourseContainer = () => {
       variables={{ cid }}
       render={({ error, props }) => {
         if (error) {
+          // error.name
           message.error("Unable to fetch Data!");
           return <ErrorPage id={500} />;
         }

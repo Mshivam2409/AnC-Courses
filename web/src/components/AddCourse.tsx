@@ -14,12 +14,13 @@ import {
   //   Button,
   AutoComplete,
 } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import AddCourseMutation from "actions/AddCourseMutation";
 import MdEditor from "react-markdown-editor-lite";
 import ReactMarkdown from "react-markdown";
 import "react-markdown-editor-lite/lib/index.css";
 // import MarkdownIt from "markdown-it";
 import { depts } from "../constants";
+import environment from "services/gqlenv";
 // const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 function renderHTML(text: string) {
@@ -78,24 +79,32 @@ const formItemLayout = {
     sm: { span: 16 },
   },
 };
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
 
 const RegistrationForm = () => {
   const [form] = Form.useForm();
+  const [contents, setContents] = useState<string>("");
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: {
+    agreement: boolean;
+    captcha: string;
+    credits: string;
+    dept: string;
+    number: string;
+    prefix: string;
+    semester: string;
+    title: string;
+  }) => {
+    const { credits, dept, number, title, semester, prefix } = values;
     console.log("Received values of form: ", values);
+    AddCourseMutation.commit(environment, {
+      credits,
+      dept,
+      title,
+      number: `${prefix}${number}`,
+      offered: semester,
+      contents: contents,
+      author: "",
+    });
   };
 
   const prefixSelector = (
@@ -112,29 +121,12 @@ const RegistrationForm = () => {
     </Form.Item>
   );
 
-  const [autoCompleteResult, setAutoCompleteResult] = useState<string[]>([]);
-
-  const onWebsiteChange = (value: string) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        [".com", ".org", ".net"].map((domain) => `${value}${domain}`)
-      );
-    }
-  };
-
-  const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-  }));
-
   return (
     <Form
       layout="vertical"
       {...formItemLayout}
       form={form}
-      name="register"
+      name="courser"
       onFinish={onFinish}
       initialValues={{
         residence: ["zhejiang", "hangzhou", "xihu"],
@@ -284,7 +276,11 @@ const RegistrationForm = () => {
       </Form.Item>
 
       <Form.Item>
-        <MdEditor style={{ height: "500px" }} renderHTML={renderHTML} />
+        <MdEditor
+          style={{ height: "500px" }}
+          renderHTML={renderHTML}
+          onChange={(data) => setContents(data.text)}
+        />
       </Form.Item>
       <Form.Item
         name="agreement"

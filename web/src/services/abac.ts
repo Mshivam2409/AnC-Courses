@@ -23,10 +23,9 @@ export enum permissions {
 
 export enum Role {
     ADMIN = "ADMIN",
-    USER = "USER",
-    COORDI = "COORDI",
-    SECY = "SECY",
+    MANAGER = "MANAGER",
     ANONYMOUS = "ANONYMOUS",
+    USER = "USER",
     BANNED = "BANNED",
 }
 

@@ -1,0 +1,33 @@
+import { graphql, commitMutation, Environment } from 'react-relay';
+import { AddCourseMutation } from '__generated__/AddCourseMutation.graphql';
+import { SearchCoursesMutation } from '__generated__/SearchCoursesMutation.graphql';
+
+// We start by defining our mutation from above using `graphql`
+const mutation = graphql`
+  mutation SearchCoursesMutation($params: SearchParams!) {
+    searchCourses(params: $params) {
+      id
+      title
+      number
+      credits
+    }
+  }
+`;
+
+function commit(
+  environment: Environment,
+  params: SearchCoursesMutation["variables"]["params"],
+) {
+  // Now we just call commitMutation with the appropriate parameters
+  return commitMutation<SearchCoursesMutation>(
+    environment,
+    {
+      mutation,
+      variables: {
+        params,
+      },
+    }
+  );
+}
+
+export default { commit };

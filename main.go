@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Mshivam2409/AnC-Courses/router"
+	"github.com/spf13/viper"
 
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
@@ -36,43 +37,22 @@ func main() {
 			return nil
 		},
 	})
-	// Setup mgm default config
-
-	// if err != nil {
-	// 	log.Fatal("uN")
-	// }
-	// appf, err := firebase.NewApp(context.Background(), nil)
-	// if err != nil {
-	// 	log.Fatalf("error initializing app: %v\n", err)
-	// }
-	// appf.
 	app.Use(cors.New(cors.Config{AllowOrigins: "*"}))
 	app.Use(recover.New())
 	prometheus := fiberprometheus.New("my-service-name")
 	prometheus.RegisterAt(app, "/metrics")
 	app.Use(prometheus.Middleware)
-	// viper.SetConfigName("config")
-	// viper.SetConfigType("yaml")
-	// clientOptions := options.Client().ApplyURI("mongodb+srv://anc:courses@primary.hsesw.mongodb.net/primarydb?retryWrites=true&w=majority")
-
-	// Connect to MongoDB
-	// client, err := mongo.Connect(context.TODO(), clientOptions)
-
-	// if err != nil {
-	// 	print(err.Error())
-	// }
-
-	// err = client.Ping(context.TODO(), nil)
-
-	// if err != nil {
-	// 	print(err.Error())
-	// }
-
-	fmt.Println("Connected to MongoDB!")
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("/etc/config/fiber/")
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil {             // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s", err))
+	}
 	router.SetupRoutes(app)
-	print(111)
 	app.Static("/", "html")
-	err := app.Listen(":5000")
+	err = app.Listen(":5000")
 	if err != nil {
 		fmt.Print(err)
 	}

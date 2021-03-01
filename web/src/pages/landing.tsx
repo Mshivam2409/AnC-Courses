@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import "assets/landing.scss";
+import "assets/scss/landing.scss";
 import logo from "assets/img/logo192.png";
 import useScript from "hooks/useScript";
 

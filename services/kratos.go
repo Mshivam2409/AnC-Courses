@@ -3,25 +3,25 @@ package services
 import (
 	"fmt"
 
-	"github.com/ory/kratos-client-go/client"
+	"github.com/gofiber/fiber/v2"
 	"github.com/ory/kratos-client-go/client/admin"
-	"github.com/ory/kratos-client-go/models"
+	kratosmodels "github.com/ory/kratos-client-go/models"
+	"github.com/spf13/viper"
 )
 
-// CreateUser Creates a new user using the Kratos Admin API
-// Only Admins should have access to this api
-func CreateUser() {
-	c := client.NewHTTPClientWithConfig(nil, &client.TransportConfig{
-		Host:     "127.0.0.1:4434",
-		BasePath: "/",
-		Schemes:  []string{"http"},
-	})
-	res, err := c.Admin.CreateRecoveryLink(admin.NewCreateRecoveryLinkParams().WithBody(&models.CreateRecoveryLink{
-		IdentityID: models.UUID("the-uuid"),
-	}))
-	if err != nil {
-		// ...
-	}
+// CreateUser sdfsd
+func (ory *Ory) CreateUser(email string) error {
+	schema := viper.GetString("vasd")
+	i, err := ory.OryKratos.Admin.CreateIdentity(&admin.CreateIdentityParams{Body: &kratosmodels.CreateIdentity{SchemaID: &schema, Traits: fiber.Map{"email": email}}})
+	id := i.GetPayload().ID
+	link, err := ory.OryKratos.Admin.CreateRecoveryLink(&admin.CreateRecoveryLinkParams{Body: &kratosmodels.CreateRecoveryLink{IdentityID: id}})
+	fmt.Print(link.Payload.RecoveryLink)
+	ory.ElevateUser(email, "user")
+	return err
+}
 
-	fmt.Printf("Use link: %s", *res.Payload.RecoveryLink)
+// DeleteUser : adas
+func (ory *Ory) DeleteUser(id string) error {
+	_, err := ory.OryKratos.Admin.DeleteIdentity(&admin.DeleteIdentityParams{ID: id})
+	return err
 }

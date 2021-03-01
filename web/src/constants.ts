@@ -30,30 +30,33 @@ export const FORM_LABELS: { [key: string]: FormLabel } = {
     }
 }
 
-export const depts = ["AE", "ART", "BSE", "CE", "CHE", "CHM", "CS", "DES", "ECO", "EE", "EEM", "ENG", "ES", "ESC", "ESO", "IME", "PHY", "LIF", "LT", "MBA", "ME", "MSE", "MSO", "MTH", "NT", "PHI", "PHY", "PSY", "SE", "SOC", "TA"];
+export const depts = ["AE", "ART", "BSE", "CE", "CHE", "CHM", "CS", "CSO", "DES", "ECO", "EE", "EEM", "ENG", "ES", "ESC", "ESO", "IME", "PHY", "LIF", "LT", "MBA", "ME", "MSE", "MSO", "MTH", "NT", "PHI", "PHY", "PSY", "SE", "SOC", "TA"];
 
-export interface IBReview {
-    id: string
-    semester: string,
-    instructor: string,
-    grading: string,
-    // course: string
-}
+const offerings_sub = [
+    {
+        value: 'Even',
+        label: 'Even',
+    },
+    {
+        value: 'Odd',
+        label: 'Odd',
+    },
+]
 
-export interface IBCourse {
-    readonly title: string;
-    readonly number: string;
-    readonly credits: string;
-    readonly offered: string;
-    readonly contents: string;
-    readonly author: string;
-    readonly reviews: ReadonlyArray<{
-        readonly id: string;
-        readonly semester: string;
-        readonly instructor: string;
-        readonly grading: string;
-    }>;
-    readonly driveFiles: ReadonlyArray<string>;
-    readonly id: string;
-    readonly dept: string;
-}
+export const offerings = [
+    {
+        value: '19-20',
+        label: '19-20',
+        children: offerings_sub
+    },
+    {
+        value: '20-21',
+        label: '19-20',
+        children: offerings_sub
+    }, {
+        value: '18-19',
+        label: '18-19',
+        children: offerings_sub
+    },
+
+];

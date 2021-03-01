@@ -1,20 +1,11 @@
 // import userEvent from "@testing-library/user-event";
 // import { Collapse, message, Result, Spin, Typography } from "antd";
-import { Col } from "antd";
-import Collapse from "antd/lib/collapse";
-import message from "antd/lib/message";
-import Result from "antd/lib/result";
-import Spin from "antd/lib/spin";
-import Typography from "antd/lib/typography";
-
-import Axios, { AxiosError, AxiosResponse } from "axios";
-import { useState } from "react";
-import { Fragment } from "react";
-import { useEffect } from "react";
-import ReactMarkdown from "react-markdown";
-import { useRecoilValue, useResetRecoilState } from "recoil";
 import { CourseQueryResponse } from "__generated__/CourseQuery.graphql";
-import CollectionsPage from "./AddReview";
+import Collapse from "antd/lib/collapse";
+import Typography from "antd/lib/typography";
+import { Fragment } from "react";
+import ReactMarkdown from "react-markdown";
+
 // import { IReview } from "types";
 
 const Reviews = (props: {
