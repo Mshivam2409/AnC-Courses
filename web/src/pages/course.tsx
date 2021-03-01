@@ -13,6 +13,7 @@ import Files from "components/Files";
 import Reviews from "components/Reviews";
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import AddReview from "components/AddReview";
 
 // import url from "utils/api";
 // import { ICourse } from "types";
@@ -27,15 +28,7 @@ const Course = (props: {
       className="site-page-header-responsive"
       onBack={() => window.history.back()}
       title={`${course?.number || " "}   ${course?.title || " "}`}
-      extra={
-        [
-          // <Button key="3">Operation</Button>,
-          // <Button key="2">Operation</Button>,
-          // <Button key="1" type="primary">
-          //   Mookit
-          // </Button>,
-        ]
-      }
+      extra={[<AddReview key={10} />]}
       footer={
         <Tabs defaultActiveKey="1">
           <TabPane tab="Details" key="1">

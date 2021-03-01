@@ -1,20 +1,21 @@
+import { Button, Cascader, Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Radio, Cascader } from "antd";
+
 import { offerings } from "../constants";
 
 interface Values {
-  title: string;
-  description: string;
-  modifier: string;
+  contents: string;
+  semester: string[];
+  instructor: string;
 }
 
-interface CollectionCreateFormProps {
+interface AddReviewFormProps {
   visible: boolean;
   onCreate: (values: Values) => void;
   onCancel: () => void;
 }
 
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+const AddReviewForm: React.FC<AddReviewFormProps> = ({
   visible,
   onCreate,
   onCancel,
@@ -23,7 +24,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   return (
     <Modal
       visible={visible}
-      title="Create a new collection"
+      title="Submit a new review!"
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
@@ -41,75 +42,63 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     >
       <Form
         form={form}
+        name="register"
+        initialValues={{
+          semester: ["20-21", "Odd"],
+        }}
+        scrollToFirstError
         layout="vertical"
-        name="form_in_modal"
-        initialValues={{ modifier: "public" }}
       >
         <Form.Item
-          name="title"
+          name="instructor"
           label="Professor"
           rules={[
             {
               required: true,
-              message: "Please input the name of the professor",
+              message: "Please input your instructor's name!",
             },
           ]}
         >
           <Input />
         </Form.Item>
-        <Form.Item name="description" label="Description">
-          <Input.TextArea />
-        </Form.Item>
+
         <Form.Item
-          name="modifier"
-          className="collection-create-form_last-form-item"
+          name="contents"
+          label="Course Review"
+          rules={[
+            {
+              required: true,
+              message: "Please input the review!",
+            },
+          ]}
+          hasFeedback
         >
-          {/* <Cascader
-            options={[
-              {
-                value: "zhejiang",
-                label: "Zhejiang",
-                children: [
-                  {
-                    value: "hangzhou",
-                    label: "Hangzhou",
-                    children: [
-                      {
-                        value: "xihu",
-                        label: "West Lake",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                value: "jiangsu",
-                label: "Jiangsu",
-                children: [
-                  {
-                    value: "nanjing",
-                    label: "Nanjing",
-                    children: [
-                      {
-                        value: "zhonghuamen",
-                        label: "Zhong Hua Men",
-                      },
-                    ],
-                  },
-                ],
-              },
-            ]} */}
-          {/* /> */}
+          <Input.TextArea rows={10} />
+        </Form.Item>
+
+        <Form.Item
+          name="semester"
+          label="Semester"
+          rules={[
+            {
+              type: "array",
+              required: true,
+              message:
+                "Please select your the semester you studied the course!",
+            },
+          ]}
+        >
+          <Cascader options={offerings} />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-const CollectionsPage = () => {
+const AddReview = () => {
   const [visible, setVisible] = useState(false);
 
-  const onCreate = (values: any) => {
+  const onCreate = async (values: Values) => {
     console.log("Received values of form: ", values);
     setVisible(false);
   };
@@ -122,9 +111,9 @@ const CollectionsPage = () => {
           setVisible(true);
         }}
       >
-        New Collection
+        Add Review
       </Button>
-      <CollectionCreateForm
+      <AddReviewForm
         visible={visible}
         onCreate={onCreate}
         onCancel={() => {
@@ -135,4 +124,4 @@ const CollectionsPage = () => {
   );
 };
 
-export default CollectionsPage;
+export default AddReview;
