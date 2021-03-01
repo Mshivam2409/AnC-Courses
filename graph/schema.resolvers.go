@@ -158,32 +158,3 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) SearchCourses(ctx context.Context, params *models.SearchParams) ([]*models.Course, error) {
-	courses := []*models.Course{}
-	if params.Identifier == "" {
-		return courses, nil
-	}
-	filter := bson.D{{Key: "number", Value: bson.D{{Key: "$regex", Value: primitive.Regex{Pattern: "^" + params.Identifier, Options: "i"}}}}}
-	limit := int64(10)
-	cur, err := database.MongoClient.Collection("courses").Find(context.TODO(), filter, &options.FindOptions{Limit: &limit})
-	if err != nil {
-		print(err.Error())
-	}
-	for cur.Next(context.TODO()) {
-		elem := &models.MGMCourse{}
-		err := cur.Decode(elem)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		courses = append(courses, &models.Course{ID: elem.ID, Number: elem.Number, Credits: elem.Credits, Title: elem.Title})
-	}
-	if err := cur.Err(); err != nil {
-		print(err.Error())
-	}
-	cur.Close(context.TODO())
-	return courses, err
-}
-func (r *mutationResolver) SearchUsers(ctx context.Context, params *models.SearchParams) ([]*models.User, error) {
-	panic(fmt.Errorf("not implemented"))
-}
