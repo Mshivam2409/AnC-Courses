@@ -45,12 +45,13 @@ func main() {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("/etc/config/fiber/")
 	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
+	viper.SetConfigType("yml")
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s", err))
 	}
 	router.SetupRoutes(app)
+	fmt.Print(viper.GetString("mongo.users"))
 	app.Static("/", "html")
 	err = app.Listen(":5000")
 	if err != nil {

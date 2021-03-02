@@ -42,6 +42,6 @@ func CreateFile(c *fiber.Ctx) error {
 			{Key: "driveFiles", Value: bson.A{"$each", files}},
 		}},
 	}
-	err = database.MongoClient.Collection("courses").FindOneAndUpdate(context.TODO(), bson.D{{Key: "number", Value: cno}}, update).Decode(&models.MGMCourse{})
+	err = database.MongoClient.Courses.Collection("courses").FindOneAndUpdate(context.TODO(), bson.D{{Key: "number", Value: cno}}, update).Decode(&models.MGMCourse{})
 	return c.Status(200).JSON(fiber.Map{"message": "success"})
 }

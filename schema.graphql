@@ -58,16 +58,19 @@ type Response {
 }
 
 type User {
-  firstName: String!
-  lastName: String!
-  email: String!
-  rollNo: String!
+  ID: String!
+  name: String!
+  username: String!
+  rollno: String!
   banned: Boolean!
-  role: String!
+  clearance: Int!
 }
 
 type Mutation {
   addCourse(course: NewCourse!): Response
   addReview(review: NewReview!): Response
   modifyReview(reviewID: String!, status: Boolean!): Review!
+  elevateUser(username: String!): User!
+  demoteUser(username: String!): User!
+  toggleBanUser(username: String!, banned: Boolean!): User!
 }

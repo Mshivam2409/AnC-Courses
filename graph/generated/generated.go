@@ -61,9 +61,12 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AddCourse    func(childComplexity int, course models.NewCourse) int
-		AddReview    func(childComplexity int, review models.NewReview) int
-		ModifyReview func(childComplexity int, reviewID string, status bool) int
+		AddCourse     func(childComplexity int, course models.NewCourse) int
+		AddReview     func(childComplexity int, review models.NewReview) int
+		DemoteUser    func(childComplexity int, username string) int
+		ElevateUser   func(childComplexity int, username string) int
+		ModifyReview  func(childComplexity int, reviewID string, status bool) int
+		ToggleBanUser func(childComplexity int, username string, banned bool) int
 	}
 
 	Query struct {
@@ -89,11 +92,11 @@ type ComplexityRoot struct {
 
 	User struct {
 		Banned    func(childComplexity int) int
-		Email     func(childComplexity int) int
-		FirstName func(childComplexity int) int
-		LastName  func(childComplexity int) int
-		Role      func(childComplexity int) int
-		RollNo    func(childComplexity int) int
+		Clearance func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		Rollno    func(childComplexity int) int
+		Username  func(childComplexity int) int
 	}
 }
 
@@ -101,6 +104,9 @@ type MutationResolver interface {
 	AddCourse(ctx context.Context, course models.NewCourse) (*models.Response, error)
 	AddReview(ctx context.Context, review models.NewReview) (*models.Response, error)
 	ModifyReview(ctx context.Context, reviewID string, status bool) (*models.Review, error)
+	ElevateUser(ctx context.Context, username string) (*models.User, error)
+	DemoteUser(ctx context.Context, username string) (*models.User, error)
+	ToggleBanUser(ctx context.Context, username string, banned bool) (*models.User, error)
 }
 type QueryResolver interface {
 	GetCourseData(ctx context.Context, number string) (*models.CourseData, error)
@@ -225,6 +231,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.AddReview(childComplexity, args["review"].(models.NewReview)), true
 
+	case "Mutation.demoteUser":
+		if e.complexity.Mutation.DemoteUser == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_demoteUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DemoteUser(childComplexity, args["username"].(string)), true
+
+	case "Mutation.elevateUser":
+		if e.complexity.Mutation.ElevateUser == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_elevateUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ElevateUser(childComplexity, args["username"].(string)), true
+
 	case "Mutation.modifyReview":
 		if e.complexity.Mutation.ModifyReview == nil {
 			break
@@ -236,6 +266,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.ModifyReview(childComplexity, args["reviewID"].(string), args["status"].(bool)), true
+
+	case "Mutation.toggleBanUser":
+		if e.complexity.Mutation.ToggleBanUser == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_toggleBanUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ToggleBanUser(childComplexity, args["username"].(string), args["banned"].(bool)), true
 
 	case "Query.getCourseData":
 		if e.complexity.Query.GetCourseData == nil {
@@ -348,40 +390,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Banned(childComplexity), true
 
-	case "User.email":
-		if e.complexity.User.Email == nil {
+	case "User.clearance":
+		if e.complexity.User.Clearance == nil {
 			break
 		}
 
-		return e.complexity.User.Email(childComplexity), true
+		return e.complexity.User.Clearance(childComplexity), true
 
-	case "User.firstName":
-		if e.complexity.User.FirstName == nil {
+	case "User.ID":
+		if e.complexity.User.ID == nil {
 			break
 		}
 
-		return e.complexity.User.FirstName(childComplexity), true
+		return e.complexity.User.ID(childComplexity), true
 
-	case "User.lastName":
-		if e.complexity.User.LastName == nil {
+	case "User.name":
+		if e.complexity.User.Name == nil {
 			break
 		}
 
-		return e.complexity.User.LastName(childComplexity), true
+		return e.complexity.User.Name(childComplexity), true
 
-	case "User.role":
-		if e.complexity.User.Role == nil {
+	case "User.rollno":
+		if e.complexity.User.Rollno == nil {
 			break
 		}
 
-		return e.complexity.User.Role(childComplexity), true
+		return e.complexity.User.Rollno(childComplexity), true
 
-	case "User.rollNo":
-		if e.complexity.User.RollNo == nil {
+	case "User.username":
+		if e.complexity.User.Username == nil {
 			break
 		}
 
-		return e.complexity.User.RollNo(childComplexity), true
+		return e.complexity.User.Username(childComplexity), true
 
 	}
 	return 0, false
@@ -507,18 +549,21 @@ type Response {
 }
 
 type User {
-  firstName: String!
-  lastName: String!
-  email: String!
-  rollNo: String!
+  ID: String!
+  name: String!
+  username: String!
+  rollno: String!
   banned: Boolean!
-  role: String!
+  clearance: Int!
 }
 
 type Mutation {
   addCourse(course: NewCourse!): Response
   addReview(review: NewReview!): Response
   modifyReview(reviewID: String!, status: Boolean!): Review!
+  elevateUser(username: String!): User!
+  demoteUser(username: String!): User!
+  toggleBanUser(username: String!, banned: Boolean!): User!
 }
 `, BuiltIn: false},
 }
@@ -558,6 +603,36 @@ func (ec *executionContext) field_Mutation_addReview_args(ctx context.Context, r
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_demoteUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["username"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["username"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_elevateUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["username"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["username"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_modifyReview_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -579,6 +654,30 @@ func (ec *executionContext) field_Mutation_modifyReview_args(ctx context.Context
 		}
 	}
 	args["status"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_toggleBanUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["username"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["username"] = arg0
+	var arg1 bool
+	if tmp, ok := rawArgs["banned"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("banned"))
+		arg1, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["banned"] = arg1
 	return args, nil
 }
 
@@ -1200,6 +1299,132 @@ func (ec *executionContext) _Mutation_modifyReview(ctx context.Context, field gr
 	return ec.marshalNReview2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐReview(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation_elevateUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_elevateUser_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ElevateUser(rctx, args["username"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_demoteUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_demoteUser_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DemoteUser(rctx, args["username"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_toggleBanUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_toggleBanUser_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ToggleBanUser(rctx, args["username"].(string), args["banned"].(bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_getCourseData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1719,7 +1944,7 @@ func (ec *executionContext) _Review_approved(ctx context.Context, field graphql.
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_ID(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1737,7 +1962,7 @@ func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.C
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.FirstName, nil
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1754,7 +1979,7 @@ func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1772,7 +1997,7 @@ func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.Co
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.LastName, nil
+		return obj.Name, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1789,7 +2014,7 @@ func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1807,7 +2032,7 @@ func (ec *executionContext) _User_email(ctx context.Context, field graphql.Colle
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Email, nil
+		return obj.Username, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1824,7 +2049,7 @@ func (ec *executionContext) _User_email(ctx context.Context, field graphql.Colle
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_rollNo(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_rollno(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1842,7 +2067,7 @@ func (ec *executionContext) _User_rollNo(ctx context.Context, field graphql.Coll
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.RollNo, nil
+		return obj.Rollno, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1894,7 +2119,7 @@ func (ec *executionContext) _User_banned(ctx context.Context, field graphql.Coll
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_role(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_clearance(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1912,7 +2137,7 @@ func (ec *executionContext) _User_role(ctx context.Context, field graphql.Collec
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Role, nil
+		return obj.Clearance, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1924,9 +2149,9 @@ func (ec *executionContext) _User_role(ctx context.Context, field graphql.Collec
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -3279,6 +3504,21 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "elevateUser":
+			out.Values[i] = ec._Mutation_elevateUser(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "demoteUser":
+			out.Values[i] = ec._Mutation_demoteUser(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "toggleBanUser":
+			out.Values[i] = ec._Mutation_toggleBanUser(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3471,23 +3711,23 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("User")
-		case "firstName":
-			out.Values[i] = ec._User_firstName(ctx, field, obj)
+		case "ID":
+			out.Values[i] = ec._User_ID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "lastName":
-			out.Values[i] = ec._User_lastName(ctx, field, obj)
+		case "name":
+			out.Values[i] = ec._User_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "email":
-			out.Values[i] = ec._User_email(ctx, field, obj)
+		case "username":
+			out.Values[i] = ec._User_username(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "rollNo":
-			out.Values[i] = ec._User_rollNo(ctx, field, obj)
+		case "rollno":
+			out.Values[i] = ec._User_rollno(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3496,8 +3736,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "role":
-			out.Values[i] = ec._User_role(ctx, field, obj)
+		case "clearance":
+			out.Values[i] = ec._User_clearance(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3848,6 +4088,21 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNNewCourse2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐNewCourse(ctx context.Context, v interface{}) (models.NewCourse, error) {
 	res, err := ec.unmarshalInputNewCourse(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3952,6 +4207,10 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNUser2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {
+	return ec._User(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.User) graphql.Marshaler {

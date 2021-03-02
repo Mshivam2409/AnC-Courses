@@ -6,3 +6,4 @@
 bin/main
 .secrets/**
 !.secrets/*.secret
+config.yml

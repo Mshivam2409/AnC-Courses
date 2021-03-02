@@ -55,10 +55,10 @@ type SearchParams struct {
 }
 
 type User struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Email     string `json:"email"`
-	RollNo    string `json:"rollNo"`
+	ID        string `json:"ID"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	Rollno    string `json:"rollno"`
 	Banned    bool   `json:"banned"`
-	Role      string `json:"role"`
+	Clearance int    `json:"clearance"`
 }
