@@ -1,8 +1,11 @@
 package models
 
 type MGMUser struct {
-	email  string
-	ID     string
-	role   string
-	banned bool
+	ID        string `bson:"_id,omitempty"`
+	Index     int    `bson:"index"`
+	Username  string `bson:"username"`
+	Name      string `bson:"name"`
+	Clearance int    `bson:"clearance"`
+	Banned    bool   `bson:"banned"`
+	RollNo    string `bson:"rollno"`
 }

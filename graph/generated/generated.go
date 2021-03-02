@@ -65,6 +65,7 @@ type ComplexityRoot struct {
 		AddReview     func(childComplexity int, review models.NewReview) int
 		DemoteUser    func(childComplexity int, username string) int
 		ElevateUser   func(childComplexity int, username string) int
+		ModifyCourse  func(childComplexity int, course *models.ModifyCourseInput) int
 		ModifyReview  func(childComplexity int, reviewID string, status bool) int
 		ToggleBanUser func(childComplexity int, username string, banned bool) int
 	}
@@ -103,6 +104,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	AddCourse(ctx context.Context, course models.NewCourse) (*models.Response, error)
 	AddReview(ctx context.Context, review models.NewReview) (*models.Response, error)
+	ModifyCourse(ctx context.Context, course *models.ModifyCourseInput) (*models.Course, error)
 	ModifyReview(ctx context.Context, reviewID string, status bool) (*models.Review, error)
 	ElevateUser(ctx context.Context, username string) (*models.User, error)
 	DemoteUser(ctx context.Context, username string) (*models.User, error)
@@ -254,6 +256,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.ElevateUser(childComplexity, args["username"].(string)), true
+
+	case "Mutation.modifyCourse":
+		if e.complexity.Mutation.ModifyCourse == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_modifyCourse_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ModifyCourse(childComplexity, args["course"].(*models.ModifyCourseInput)), true
 
 	case "Mutation.modifyReview":
 		if e.complexity.Mutation.ModifyReview == nil {
@@ -511,6 +525,14 @@ input NewCourse {
   author: String!
 }
 
+input ModifyCourseInput {
+  title: String!
+  credits: String!
+  offered: String!
+  contents: String!
+  dept: String!
+}
+
 type Review {
   id: ID!
   semester: String!
@@ -560,6 +582,7 @@ type User {
 type Mutation {
   addCourse(course: NewCourse!): Response
   addReview(review: NewReview!): Response
+  modifyCourse(course: ModifyCourseInput): Course!
   modifyReview(reviewID: String!, status: Boolean!): Review!
   elevateUser(username: String!): User!
   demoteUser(username: String!): User!
@@ -630,6 +653,21 @@ func (ec *executionContext) field_Mutation_elevateUser_args(ctx context.Context,
 		}
 	}
 	args["username"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_modifyCourse_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.ModifyCourseInput
+	if tmp, ok := rawArgs["course"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("course"))
+		arg0, err = ec.unmarshalOModifyCourseInput2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐModifyCourseInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["course"] = arg0
 	return args, nil
 }
 
@@ -1255,6 +1293,48 @@ func (ec *executionContext) _Mutation_addReview(ctx context.Context, field graph
 	res := resTmp.(*models.Response)
 	fc.Result = res
 	return ec.marshalOResponse2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_modifyCourse(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_modifyCourse_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ModifyCourse(rctx, args["course"].(*models.ModifyCourseInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Course)
+	fc.Result = res
+	return ec.marshalNCourse2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐCourse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_modifyReview(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3241,6 +3321,58 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputModifyCourseInput(ctx context.Context, obj interface{}) (models.ModifyCourseInput, error) {
+	var it models.ModifyCourseInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "title":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "credits":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("credits"))
+			it.Credits, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "offered":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offered"))
+			it.Offered, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "contents":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contents"))
+			it.Contents, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dept":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dept"))
+			it.Dept, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewCourse(ctx context.Context, obj interface{}) (models.NewCourse, error) {
 	var it models.NewCourse
 	var asMap = obj.(map[string]interface{})
@@ -3499,6 +3631,11 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec._Mutation_addCourse(ctx, field)
 		case "addReview":
 			out.Values[i] = ec._Mutation_addReview(ctx, field)
+		case "modifyCourse":
+			out.Values[i] = ec._Mutation_modifyCourse(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "modifyReview":
 			out.Values[i] = ec._Mutation_modifyReview(ctx, field)
 			if out.Values[i] == graphql.Null {
@@ -4012,6 +4149,10 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCourse2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐCourse(ctx context.Context, sel ast.SelectionSet, v models.Course) graphql.Marshaler {
+	return ec._Course(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNCourse2ᚕᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐCourseᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Course) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -4511,6 +4652,14 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
+}
+
+func (ec *executionContext) unmarshalOModifyCourseInput2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐModifyCourseInput(ctx context.Context, v interface{}) (*models.ModifyCourseInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputModifyCourseInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOResponse2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v *models.Response) graphql.Marshaler {

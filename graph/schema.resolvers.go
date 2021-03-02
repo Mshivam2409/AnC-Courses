@@ -115,6 +115,10 @@ func (r *mutationResolver) AddReview(ctx context.Context, review models.NewRevie
 	return &models.Response{Ok: true, Message: "success"}, err
 }
 
+func (r *mutationResolver) ModifyCourse(ctx context.Context, course *models.ModifyCourseInput) (*models.Course, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) ModifyReview(ctx context.Context, reviewID string, status bool) (*models.Review, error) {
 	rid, err := primitive.ObjectIDFromHex(reviewID)
 	rev := &models.MGMReview{}
@@ -139,15 +143,48 @@ func (r *mutationResolver) ModifyReview(ctx context.Context, reviewID string, st
 }
 
 func (r *mutationResolver) ElevateUser(ctx context.Context, username string) (*models.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	u := &models.MGMUser{}
+	filter := bson.D{{Key: "username", Value: username}}
+	update := bson.D{{Key: "$inc", Value: bson.D{{Key: "clearance", Value: 1}}}}
+	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	return &models.User{
+		ID:        u.ID,
+		Name:      u.Name,
+		Rollno:    u.RollNo,
+		Username:  u.Username,
+		Banned:    u.Banned,
+		Clearance: u.Clearance,
+	}, err
 }
 
 func (r *mutationResolver) DemoteUser(ctx context.Context, username string) (*models.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	u := &models.MGMUser{}
+	filter := bson.D{{Key: "username", Value: username}}
+	update := bson.D{{Key: "$inc", Value: bson.D{{Key: "clearance", Value: -1}}}}
+	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	return &models.User{
+		ID:        u.ID,
+		Name:      u.Name,
+		Rollno:    u.RollNo,
+		Username:  u.Username,
+		Banned:    u.Banned,
+		Clearance: u.Clearance,
+	}, err
 }
 
 func (r *mutationResolver) ToggleBanUser(ctx context.Context, username string, banned bool) (*models.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	u := &models.MGMUser{}
+	filter := bson.D{{Key: "username", Value: username}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "banned", Value: banned}}}}
+	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	return &models.User{
+		ID:        u.ID,
+		Name:      u.Name,
+		Rollno:    u.RollNo,
+		Username:  u.Username,
+		Banned:    u.Banned,
+		Clearance: u.Clearance,
+	}, err
 }
 
 func (r *queryResolver) GetCourseData(ctx context.Context, number string) (*models.CourseData, error) {

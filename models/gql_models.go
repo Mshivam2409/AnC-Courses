@@ -19,6 +19,14 @@ type CourseData struct {
 	Reviews []*Review `json:"reviews"`
 }
 
+type ModifyCourseInput struct {
+	Title    string `json:"title"`
+	Credits  string `json:"credits"`
+	Offered  string `json:"offered"`
+	Contents string `json:"contents"`
+	Dept     string `json:"dept"`
+}
+
 type NewCourse struct {
 	Title    string `json:"title"`
 	Number   string `json:"number"`

@@ -20,6 +20,14 @@ input NewCourse {
   author: String!
 }
 
+input ModifyCourseInput {
+  title: String!
+  credits: String!
+  offered: String!
+  contents: String!
+  dept: String!
+}
+
 type Review {
   id: ID!
   semester: String!
@@ -69,6 +77,7 @@ type User {
 type Mutation {
   addCourse(course: NewCourse!): Response
   addReview(review: NewReview!): Response
+  modifyCourse(course: ModifyCourseInput): Course!
   modifyReview(reviewID: String!, status: Boolean!): Review!
   elevateUser(username: String!): User!
   demoteUser(username: String!): User!
