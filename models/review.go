@@ -10,5 +10,5 @@ type MGMReview struct {
 	Professor string             `bson:"professor"`
 	Contents  string             `bson:"contents"`
 	Author    string             `bson:"author"`
-	Approved  string             `bson:"approved"`
+	Approved  bool               `bson:"approved"`
 }

@@ -1,11 +1,10 @@
 import { message } from 'antd';
 import { graphql, commitMutation, Environment } from 'react-relay';
-import { AddCourseMutation } from '__generated__/AddCourseMutation.graphql';
-
+import { AddReviewMutation } from '__generated__/AddReviewMutation.graphql';
 // We start by defining our mutation from above using `graphql`
 const mutation = graphql`
-  mutation AddCourseMutation($course: NewCourse!) {
-    addCourse(course: $course) {
+  mutation AddReviewMutation($review: NewReview!) {
+    addReview(review: $review) {
       ok 
       message
     }
@@ -14,22 +13,22 @@ const mutation = graphql`
 
 function commit(
     environment: Environment,
-    course: AddCourseMutation["variables"]["course"],
+    review: AddReviewMutation["variables"]["review"],
 ) {
     // Now we just call commitMutation with the appropriate parameters
-    return commitMutation<AddCourseMutation>(
+    return commitMutation<AddReviewMutation>(
         environment,
         {
             mutation,
             variables: {
-                course: course,
+                review,
             },
             onCompleted: (resp, err) => {
                 if (err) {
-                    message.error(`Unable to Add Course! Error:${JSON.stringify(err)}`)
+                    message.error("Unable to Add Review!")
                 }
                 else {
-                    message.success("Successfully Added Course!")
+                    message.success("Successfully Added Review! Awaiting Approval!")
                 }
             },
             onError: (err) => { message.error(err.message) }

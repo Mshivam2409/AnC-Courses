@@ -29,6 +29,13 @@ type NewCourse struct {
 	Author   string `json:"author"`
 }
 
+type NewReview struct {
+	Semester   string `json:"semester"`
+	Instructor string `json:"instructor"`
+	Grading    string `json:"grading"`
+	Course     string `json:"course"`
+}
+
 type Response struct {
 	Ok      bool   `json:"ok"`
 	Message string `json:"message"`
@@ -40,7 +47,7 @@ type Review struct {
 	Instructor string `json:"instructor"`
 	Grading    string `json:"grading"`
 	Course     string `json:"course"`
-	Approved   string `json:"approved"`
+	Approved   bool   `json:"approved"`
 }
 
 type SearchParams struct {

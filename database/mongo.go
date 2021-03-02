@@ -13,7 +13,7 @@ func connect() *mongo.Database {
 	// if err != nil {
 	print(12)
 	// }
-	clientOptions := options.Client().ApplyURI("mongodb+srv://anc:courses@primary.hsesw.mongodb.net/primarydb?retryWrites=true&w=majority")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://mshivam:mshivam@sd-320808.seh9w.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)

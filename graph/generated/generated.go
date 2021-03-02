@@ -61,7 +61,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AddCourse func(childComplexity int, course models.NewCourse) int
+		AddCourse    func(childComplexity int, course models.NewCourse) int
+		AddReview    func(childComplexity int, review models.NewReview) int
+		ModifyReview func(childComplexity int, reviewID string, status bool) int
 	}
 
 	Query struct {
@@ -97,6 +99,8 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	AddCourse(ctx context.Context, course models.NewCourse) (*models.Response, error)
+	AddReview(ctx context.Context, review models.NewReview) (*models.Response, error)
+	ModifyReview(ctx context.Context, reviewID string, status bool) (*models.Review, error)
 }
 type QueryResolver interface {
 	GetCourseData(ctx context.Context, number string) (*models.CourseData, error)
@@ -208,6 +212,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.AddCourse(childComplexity, args["course"].(models.NewCourse)), true
+
+	case "Mutation.addReview":
+		if e.complexity.Mutation.AddReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_addReview_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AddReview(childComplexity, args["review"].(models.NewReview)), true
+
+	case "Mutation.modifyReview":
+		if e.complexity.Mutation.ModifyReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_modifyReview_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ModifyReview(childComplexity, args["reviewID"].(string), args["status"].(bool)), true
 
 	case "Query.getCourseData":
 		if e.complexity.Query.GetCourseData == nil {
@@ -447,7 +475,14 @@ type Review {
   instructor: String!
   grading: String!
   course: String!
-  approved: String!
+  approved: Boolean!
+}
+
+input NewReview {
+  semester: String!
+  instructor: String!
+  grading: String!
+  course: String!
 }
 
 type CourseData {
@@ -482,6 +517,8 @@ type User {
 
 type Mutation {
   addCourse(course: NewCourse!): Response
+  addReview(review: NewReview!): Response
+  modifyReview(reviewID: String!, status: Boolean!): Review!
 }
 `, BuiltIn: false},
 }
@@ -503,6 +540,45 @@ func (ec *executionContext) field_Mutation_addCourse_args(ctx context.Context, r
 		}
 	}
 	args["course"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_addReview_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 models.NewReview
+	if tmp, ok := rawArgs["review"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("review"))
+		arg0, err = ec.unmarshalNNewReview2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐNewReview(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["review"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_modifyReview_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["reviewID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewID"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["reviewID"] = arg0
+	var arg1 bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg1, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg1
 	return args, nil
 }
 
@@ -1043,6 +1119,87 @@ func (ec *executionContext) _Mutation_addCourse(ctx context.Context, field graph
 	return ec.marshalOResponse2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation_addReview(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_addReview_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddReview(rctx, args["review"].(models.NewReview))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Response)
+	fc.Result = res
+	return ec.marshalOResponse2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_modifyReview(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_modifyReview_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ModifyReview(rctx, args["reviewID"].(string), args["status"].(bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Review)
+	fc.Result = res
+	return ec.marshalNReview2ᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐReview(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_getCourseData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1557,9 +1714,9 @@ func (ec *executionContext) _Review_approved(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -2927,6 +3084,50 @@ func (ec *executionContext) unmarshalInputNewCourse(ctx context.Context, obj int
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNewReview(ctx context.Context, obj interface{}) (models.NewReview, error) {
+	var it models.NewReview
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "semester":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("semester"))
+			it.Semester, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "instructor":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("instructor"))
+			it.Instructor, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "grading":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("grading"))
+			it.Grading, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "course":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("course"))
+			it.Course, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputSearchParams(ctx context.Context, obj interface{}) (models.SearchParams, error) {
 	var it models.SearchParams
 	var asMap = obj.(map[string]interface{})
@@ -3071,6 +3272,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = graphql.MarshalString("Mutation")
 		case "addCourse":
 			out.Values[i] = ec._Mutation_addCourse(ctx, field)
+		case "addReview":
+			out.Values[i] = ec._Mutation_addReview(ctx, field)
+		case "modifyReview":
+			out.Values[i] = ec._Mutation_modifyReview(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3643,6 +3851,15 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 func (ec *executionContext) unmarshalNNewCourse2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐNewCourse(ctx context.Context, v interface{}) (models.NewCourse, error) {
 	res, err := ec.unmarshalInputNewCourse(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewReview2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐNewReview(ctx context.Context, v interface{}) (models.NewReview, error) {
+	res, err := ec.unmarshalInputNewReview(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReview2githubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐReview(ctx context.Context, sel ast.SelectionSet, v models.Review) graphql.Marshaler {
+	return ec._Review(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNReview2ᚕᚖgithubᚗcomᚋMshivam2409ᚋAnCᚑCoursesᚋmodelsᚐReviewᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Review) graphql.Marshaler {

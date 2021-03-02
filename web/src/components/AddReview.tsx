@@ -1,7 +1,9 @@
 import { Button, Cascader, Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-
+import environment from "services/gqlenv";
 import { offerings } from "../constants";
+import AddReviewMutation from "actions/AddReviewMutation";
+import { useParams } from "react-router-dom";
 
 interface Values {
   contents: string;
@@ -97,10 +99,15 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
 
 const AddReview = () => {
   const [visible, setVisible] = useState(false);
+  const { cid } = useParams<{ cid: string }>();
 
   const onCreate = async (values: Values) => {
-    console.log("Received values of form: ", values);
-    setVisible(false);
+    AddReviewMutation.commit(environment, {
+      grading: values.contents,
+      instructor: values.instructor,
+      semester: " ".concat(values.semester[0], values.semester[1]),
+      course: cid,
+    });
   };
 
   return (

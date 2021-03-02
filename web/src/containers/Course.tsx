@@ -2,6 +2,7 @@ import { message } from "antd";
 import Loader from "components/Loader";
 import Course from "pages/course";
 import ErrorPage from "pages/error";
+import { env } from "process";
 import React from "react";
 import { graphql, QueryRenderer } from "react-relay";
 import { useParams } from "react-router-dom";
@@ -32,6 +33,7 @@ const CourseContainer = () => {
               semester
               instructor
               grading
+              approved
             }
           }
         }
@@ -45,8 +47,10 @@ const CourseContainer = () => {
         }
         if (!props) {
           return <Loader />;
+        } else {
+          // environment.getStore().getSource().
+          return <Course courseData={props.getCourseData} />;
         }
-        return <Course courseData={props.getCourseData} />;
       }}
     />
   );
