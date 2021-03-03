@@ -54,3 +54,12 @@ func DownloadFile(ctx *fiber.Ctx) error {
 	}
 	return ctx.Status(200).SendStream(s)
 }
+
+func Register(ctx *fiber.Ctx) error {
+	u := ctx.FormValue("username")
+	err := services.OryClient.CreateUser(u)
+	if err != nil {
+		return fiber.NewError(401, fmt.Sprint(err))
+	}
+	return ctx.Status(200).JSON(fiber.Map{})
+}

@@ -97,24 +97,27 @@ func (ory *Ory) CreateUser(username string) error {
 	ok, err := ory.CanRegister(username)
 	if err != nil {
 		log.Printf("Unable to check regsitration : %v", err)
-		return fiber.NewError(401, "Error")
+		return err
 	}
 	if !ok {
 		log.Printf("Unable to check regsitration : %v", err)
-		return fiber.NewError(401, "Error")
+		return err
 	}
 	i, err := ory.OryKratos.Admin.CreateIdentity(&admin.CreateIdentityParams{Body: &kratosmodels.CreateIdentity{Traits: fiber.Map{"email": username + "@iitk.ac.in"}}, Context: context.TODO()})
 	if err != nil {
 		log.Printf("Unable to check regsitration : %v", err)
-		return fiber.NewError(401, "Error")
+		return err
 	}
 	id := i.GetPayload().ID
 	fmt.Print(id)
 	link, err := ory.OryKratos.Admin.CreateRecoveryLink(&admin.CreateRecoveryLinkParams{Body: &kratosmodels.CreateRecoveryLink{IdentityID: id}, Context: context.TODO()})
 	if err != nil {
 		log.Printf("Unable to check regsitration : %v", err)
+		return err
 	}
-	SendMail(*link.Payload.RecoveryLink, username+"@iitk.ac.in")
+	url := *link.Payload.RecoveryLink
+	message := "Dear User,\nPlease use the following link to recover your account:\n" + url
+	SendMail(message, username+"@iitk.ac.in")
 	ory.SetKratosID(string(id), username)
 	return err
 }

@@ -7,12 +7,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func SendMail(link string, to string) error {
+func SendMail(message string, to string) error {
 
 	msg := "From: " + viper.GetString("mail.from") + "\n" +
 		"To: " + to + "\n" +
 		"Subject: Account Recovery\n\n" +
-		"Dear User,\nPlease use the following link to recover your account:\n" + link
+		message
 
 	err := smtp.SendMail("smtp.gmail.com:587",
 		smtp.PlainAuth("", viper.GetString("mail.id"), viper.GetString("mail.pwd"), "smtp.gmail.com"),

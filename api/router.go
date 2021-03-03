@@ -31,5 +31,5 @@ func SetupRoutes(app *fiber.App) {
 	restAPI := app.Group("/secure")
 	restAPI.Post("/file/create", CreateFile)
 	app.Get("/file/:fid", DownloadFile)
-	// app.Post("/register", services.Register)
+	app.Post("/register", Register)
 }
