@@ -17,7 +17,8 @@ const apqPrefix = "apq:"
 
 func NewCache(redisAddress string, password string, ttl time.Duration) (*Cache, error) {
 	client := redis.NewClient(&redis.Options{
-		Addr: redisAddress,
+		Addr:     redisAddress,
+		Password: password,
 	})
 
 	err := client.Ping().Err()

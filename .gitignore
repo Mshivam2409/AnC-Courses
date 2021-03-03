@@ -8,3 +8,4 @@ bin/main
 !.secrets/*.secret
 config.yml
 config.yaml
+kratos

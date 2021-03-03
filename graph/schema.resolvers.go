@@ -9,9 +9,9 @@ import (
 	"log"
 
 	"github.com/Mshivam2409/AnC-Courses/database"
-	"github.com/Mshivam2409/AnC-Courses/googleapis"
 	"github.com/Mshivam2409/AnC-Courses/graph/generated"
 	"github.com/Mshivam2409/AnC-Courses/models"
+	"github.com/Mshivam2409/AnC-Courses/services"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,7 +26,7 @@ func (r *mutationResolver) AddCourse(ctx context.Context, course models.NewCours
 	// if !a {
 	// 	return &models.Response{Ok: false, Message: "Unauthorzed"}, err
 	// }
-	d := googleapis.GetService()
+	d := services.GetService()
 	fid, err := d.CreateFolder(course.Number)
 	log.Println(fid)
 	if err != nil {

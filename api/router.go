@@ -1,4 +1,4 @@
-package router
+package api
 
 import (
 	"log"
@@ -16,7 +16,7 @@ import (
 // SetupRoutes ....
 func SetupRoutes(app *fiber.App) {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
-	cache, err := services.NewCache(viper.GetString("redis"), viper.GetString("fsd"), 24*time.Hour)
+	cache, err := services.NewCache(viper.GetString("redis.host"), viper.GetString("redis.pwd"), 24*time.Hour)
 	if err != nil {
 		log.Printf("cannot create APQ redis cache: %v", err)
 	}
@@ -29,5 +29,7 @@ func SetupRoutes(app *fiber.App) {
 		return nil
 	})
 	restAPI := app.Group("/secure")
-	restAPI.Post("/file/create", services.CreateFile)
+	restAPI.Post("/file/create", CreateFile)
+	app.Get("/file/:fid", DownloadFile)
+	// app.Post("/register", services.Register)
 }

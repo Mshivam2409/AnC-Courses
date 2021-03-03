@@ -8,4 +8,5 @@ type MGMUser struct {
 	Clearance int    `bson:"clearance"`
 	Banned    bool   `bson:"banned"`
 	RollNo    string `bson:"rollno"`
+	KratosID  string `bson:"kid"`
 }

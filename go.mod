@@ -17,10 +17,8 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofiber/fiber/v2 v2.5.0
 	github.com/google/uuid v1.2.0 // indirect
-	github.com/hookactions/gqlgen-relay v0.0.0-20190817160925-716890b1c3b1 // indirect
 	github.com/klauspost/compress v1.11.8 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
-	github.com/ory/keto-client-go v0.5.2
 	github.com/ory/kratos-client-go v0.5.4-alpha.1
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/spf13/afero v1.5.1 // indirect
@@ -33,7 +31,7 @@ require (
 	github.com/xdg/stringprep v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.4.6
 	go.opencensus.io v0.23.0 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
+	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
 	google.golang.org/api v0.40.0
 	google.golang.org/genproto v0.0.0-20210226172003-ab064af71705 // indirect
