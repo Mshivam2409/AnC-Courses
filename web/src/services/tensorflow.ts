@@ -25,9 +25,6 @@ class TensorflowModel {
         } catch (reason) {
             return { result: false, message: reason }
         }
-
-
-
         return { result: true, message: "success" }
     }
 }

@@ -7,7 +7,6 @@ const { Text } = Typography;
 export const KratosMessages = ({ messages }: { messages: Message[] }) => (
   <div className="messages">
     {messages.map(({ text, id, type }) => (
-      // Typography
       <div className="errortext">
         <Text type="danger" className="errortext">
           {text}

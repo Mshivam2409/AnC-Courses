@@ -7,16 +7,13 @@ import {
   Tabs,
   Typography,
 } from "antd";
-import CollectionsPage from "components/AddReview";
+import AddReview from "components/AddReview";
 import Commento from "components/Commento";
 import Files from "components/Files";
 import Reviews from "components/Reviews";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import AddReview from "components/AddReview";
 
-// import url from "utils/api";
-// import { ICourse } from "types";
 const { TabPane } = Tabs;
 
 const Course = (props: {

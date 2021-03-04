@@ -3,7 +3,6 @@ import { RegistrationFlow } from "@ory/kratos-client";
 import { initialiseRequest } from "services/kratos";
 import { KratosMessages } from "components/KratosMessages";
 import { KratosForm } from "components/KratosForm";
-// import { IconLogo } from "components/IconLogo";
 import { login } from "services/auth";
 
 const Register = () => {
@@ -22,7 +21,6 @@ const Register = () => {
   return (
     <div className="auth">
       <div className="container">
-        {/* <IconLogo /> */}
         <h5 className="subheading">
           Welcome to SecureApp! <br />
           Use the form below to sign up:

@@ -1,8 +1,7 @@
-import React from "react";
-
-import { Button, Row, Tabs } from "antd";
-import { LazyLog, ScrollFollow } from "react-lazylog";
+import { Button, Tabs } from "antd";
 import { BACKEND_LOGS } from "config/backend";
+import React from "react";
+import { LazyLog } from "react-lazylog";
 
 const { TabPane } = Tabs;
 const Logs = () => {

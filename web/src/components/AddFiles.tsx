@@ -58,8 +58,8 @@ const AddFiles = () => {
       scrollToFirstError
     >
       <Form.Item
-        name="website"
-        label="Website"
+        name="Course"
+        label="course"
         rules={[{ required: true, message: "Please input website!" }]}
       >
         <AutoComplete
