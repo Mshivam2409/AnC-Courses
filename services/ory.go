@@ -44,22 +44,11 @@ var CLEARANCE = map[string]int{
 
 // IsAuthorized Checks access for a given resource
 func (ory *Ory) IsAuthorized(tokenString string, resource string) (bool, error) {
-	var claims map[string]interface{}
-	token, err := jwt.ParseSigned(tokenString)
-	if err != nil {
-		return false, err
-	}
-	err = token.UnsafeClaimsWithoutVerification(&claims)
-	if err != nil {
-		return false, err
-	}
-	u := &models.MGMUser{}
-	filter := bson.D{{Key: "username", Value: claims["username"]}}
-	err = database.MongoClient.Users.Collection("ug").FindOne(context.TODO(), filter).Decode(u)
+	c, err := ory.GetClearanceLevel(tokenString)
 	if err != nil {
 		log.Printf("Unable to check access : %v", err)
 	}
-	if u.Clearance >= CLEARANCE[resource] {
+	if c >= CLEARANCE[resource] {
 		return true, err
 	}
 
@@ -125,4 +114,23 @@ func (ory *Ory) CreateUser(username string) error {
 func (ory *Ory) DeleteUser(id string) error {
 	_, err := ory.OryKratos.Admin.DeleteIdentity(&admin.DeleteIdentityParams{ID: id})
 	return err
+}
+
+func (ory *Ory) GetClearanceLevel(tokenString string) (int, error) {
+	var claims map[string]interface{}
+	token, err := jwt.ParseSigned(tokenString)
+	if err != nil {
+		return 0, err
+	}
+	err = token.UnsafeClaimsWithoutVerification(&claims)
+	if err != nil {
+		return 0, err
+	}
+	u := &models.MGMUser{}
+	filter := bson.D{{Key: "username", Value: claims["username"]}}
+	err = database.MongoClient.Users.Collection("ug").FindOne(context.TODO(), filter).Decode(u)
+	if err != nil {
+		log.Printf("Unable to check access : %v", err)
+	}
+	return u.Clearance, err
 }

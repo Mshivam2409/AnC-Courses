@@ -11,7 +11,7 @@ const fetchQuery: FetchFunction = (
     operation,
     variables,
 ) => {
-    return axios.post('http://localhost:5000/graphql',
+    return axios.post('http://localhost:3040/graphql',
         JSON.stringify({
             query: operation.text,
             variables,

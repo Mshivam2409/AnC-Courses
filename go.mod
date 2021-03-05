@@ -10,7 +10,6 @@ require (
 	github.com/andybalholm/brotli v1.0.1 // indirect
 	github.com/ansrivas/fiberprometheus/v2 v2.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/emersion/go-smtp v0.14.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-openapi/errors v0.20.0 // indirect
 	github.com/go-openapi/runtime v0.19.26 // indirect
