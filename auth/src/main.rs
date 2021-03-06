@@ -1,4 +1,5 @@
 #![feature(proc_macro_hygiene, decl_macro)]
+mod config;
 mod graphql;
 use rocket_contrib::json::Json;
 use serde_derive::{Deserialize, Serialize};
@@ -13,13 +14,13 @@ struct GraphQLRequest {
 #[macro_use]
 extern crate rocket;
 
-#[post("/", format = "json", data = "<req>")]
+#[post("/graphql", format = "json", data = "<req>")]
 fn index(req: Json<GraphQLRequest>) {
     let parsedReq = graphql::parse_graphql(&req.query);
 }
 
 fn main() {
-    let f = std::fs::File::open("something.yaml");
-    // f::re
+    let file = "config.yaml";
+    let conf = config::load_file(file);
     rocket::ignite().mount("/", routes![index]).launch();
 }
