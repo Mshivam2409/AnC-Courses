@@ -3,7 +3,6 @@ use graphql_parser::query::{parse_query, Definition::Operation};
 
 pub fn parse_graphql(query: &String) -> ParsedReq {
     let ast = parse_query(query).unwrap();
-    // let operation = ast.definitions[0];
     if let Operation(op) = &ast.definitions[0] {
         if let graphql_parser::query::OperationDefinition::Mutation(m) = op {
             return ParsedReq {
