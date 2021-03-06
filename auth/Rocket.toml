@@ -8,3 +8,5 @@ write_timeout = 5
 log = "normal"
 limits = { forms = 32768 }
 
+[global.databases]
+mongodb = { url = "mongodb+srv://anc:courses@cluster0.x6adj.mongodb.net/students?retryWrites=true&w=majority", pool_size = 2 }
