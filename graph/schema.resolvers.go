@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Mshivam2409/AnC-Courses/database"
 	"github.com/Mshivam2409/AnC-Courses/graph/generated"
 	"github.com/Mshivam2409/AnC-Courses/models"
 	"github.com/Mshivam2409/AnC-Courses/services"
@@ -44,7 +43,7 @@ func (r *mutationResolver) AddCourse(ctx context.Context, course models.NewCours
 		Number:      course.Number,
 		Reviews:     []primitive.ObjectID{},
 	}
-	_, err = database.MongoClient.Courses.Collection("courses").InsertOne(context.TODO(), c)
+	_, err = services.MongoClient.Courses.Collection("courses").InsertOne(context.TODO(), c)
 	return &models.Response{Ok: true, Message: "Course created Successfully!"}, err
 }
 
@@ -52,7 +51,7 @@ func (r *mutationResolver) AddReview(ctx context.Context, review models.NewRevie
 	wc := writeconcern.New(writeconcern.WMajority())
 	rc := readconcern.Snapshot()
 	txnOpts := options.Transaction().SetWriteConcern(wc).SetReadConcern(rc)
-	session, err := database.MongoClient.Courses.Client().StartSession()
+	session, err := services.MongoClient.Courses.Client().StartSession()
 	if err != nil {
 		return &models.Response{Ok: false, Message: err.Error()}, err
 	}
@@ -60,7 +59,7 @@ func (r *mutationResolver) AddReview(ctx context.Context, review models.NewRevie
 	err = mongo.WithSession(context.Background(), session, func(sessionContext mongo.SessionContext) error {
 		c := &models.MGMCourse{}
 		filter := bson.D{{Key: "number", Value: review.Course}}
-		err := database.MongoClient.Courses.Collection("courses").FindOne(sessionContext, filter).Decode(c)
+		err := services.MongoClient.Courses.Collection("courses").FindOne(sessionContext, filter).Decode(c)
 		if err != nil {
 			log.Println(err)
 			return err
@@ -71,7 +70,7 @@ func (r *mutationResolver) AddReview(ctx context.Context, review models.NewRevie
 			log.Println(err)
 			return err
 		}
-		result, err := database.MongoClient.Courses.Collection("reviews").InsertOne(
+		result, err := services.MongoClient.Courses.Collection("reviews").InsertOne(
 			sessionContext,
 			&models.MGMReview{
 				Course:    cid,
@@ -97,7 +96,7 @@ func (r *mutationResolver) AddReview(ctx context.Context, review models.NewRevie
 			},
 		}
 		fmt.Printf("%v", update)
-		_ = database.MongoClient.Courses.Collection("courses").FindOneAndUpdate(sessionContext, filter, update)
+		_ = services.MongoClient.Courses.Collection("courses").FindOneAndUpdate(sessionContext, filter, update)
 		fmt.Printf("1000")
 		if err = session.CommitTransaction(sessionContext); err != nil {
 			log.Println(err)
@@ -127,9 +126,9 @@ func (r *mutationResolver) ModifyReview(ctx context.Context, reviewID string, st
 		return res, err
 	}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "approved", Value: status}}}}
-	err = database.MongoClient.Courses.Collection("reviews").FindOneAndUpdate(context.TODO(),
+	err = services.MongoClient.Courses.Collection("reviews").FindOneAndUpdate(context.TODO(),
 		bson.D{{Key: "_id", Value: rid}}, update).Decode(rev)
-	// err = database.MongoClient.Courses.Collection("reviews").FindOne(context.TODO(), bson.D{{Key: "_id", Value: rid}}).Decode(rev)
+	// err = services.MongoClient.Courses.Collection("reviews").FindOne(context.TODO(), bson.D{{Key: "_id", Value: rid}}).Decode(rev)
 	if err != nil {
 		return res, err
 	}
@@ -146,7 +145,7 @@ func (r *mutationResolver) ElevateUser(ctx context.Context, username string) (*m
 	u := &models.MGMUser{}
 	filter := bson.D{{Key: "username", Value: username}}
 	update := bson.D{{Key: "$inc", Value: bson.D{{Key: "clearance", Value: 1}}}}
-	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	err := services.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
 	return &models.User{
 		ID:        u.ID,
 		Name:      u.Name,
@@ -161,7 +160,7 @@ func (r *mutationResolver) DemoteUser(ctx context.Context, username string) (*mo
 	u := &models.MGMUser{}
 	filter := bson.D{{Key: "username", Value: username}}
 	update := bson.D{{Key: "$inc", Value: bson.D{{Key: "clearance", Value: -1}}}}
-	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	err := services.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
 	return &models.User{
 		ID:        u.ID,
 		Name:      u.Name,
@@ -176,7 +175,7 @@ func (r *mutationResolver) ToggleBanUser(ctx context.Context, username string, b
 	u := &models.MGMUser{}
 	filter := bson.D{{Key: "username", Value: username}}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "banned", Value: banned}}}}
-	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	err := services.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
 	return &models.User{
 		ID:        u.ID,
 		Name:      u.Name,
@@ -195,7 +194,7 @@ func (r *queryResolver) GetCourseData(ctx context.Context, number string) (*mode
 	// }
 	c := &models.MGMCourse{}
 	filter := bson.D{{Key: "number", Value: number}}
-	err := database.MongoClient.Courses.Collection("courses").FindOne(context.TODO(), filter).Decode(c)
+	err := services.MongoClient.Courses.Collection("courses").FindOne(context.TODO(), filter).Decode(c)
 	if err != nil {
 		log.Println(err)
 		return &models.CourseData{}, err
@@ -206,7 +205,7 @@ func (r *queryResolver) GetCourseData(ctx context.Context, number string) (*mode
 		return &models.CourseData{}, err
 	}
 	filter = bson.D{{Key: "course", Value: cid}}
-	cur, err := database.MongoClient.Courses.Collection("reviews").Find(context.TODO(), filter)
+	cur, err := services.MongoClient.Courses.Collection("reviews").Find(context.TODO(), filter)
 	if err != nil {
 		log.Println(err)
 		return &models.CourseData{}, err
@@ -248,13 +247,13 @@ func (r *queryResolver) GetCourseData(ctx context.Context, number string) (*mode
 func (r *queryResolver) GetReviewsbyCourse(ctx context.Context, number string) ([]*models.Review, error) {
 	c := &models.MGMCourse{}
 	filter := bson.D{{Key: "number", Value: number}}
-	err := database.MongoClient.Courses.Collection("courses").FindOne(context.TODO(), filter).Decode(c)
+	err := services.MongoClient.Courses.Collection("courses").FindOne(context.TODO(), filter).Decode(c)
 	if err != nil {
 		print(err.Error())
 	}
 	cid, err := primitive.ObjectIDFromHex(c.ID)
 	filter = bson.D{{Key: "course", Value: cid}}
-	cur, err := database.MongoClient.Courses.Collection("reviews").Find(context.TODO(), filter)
+	cur, err := services.MongoClient.Courses.Collection("reviews").Find(context.TODO(), filter)
 	reviews := []*models.Review{}
 	for cur.Next(context.TODO()) {
 		elem := &models.MGMReview{}
@@ -279,7 +278,7 @@ func (r *queryResolver) SearchCourses(ctx context.Context, params *models.Search
 	}
 	filter := bson.D{{Key: "number", Value: bson.D{{Key: "$regex", Value: primitive.Regex{Pattern: "^" + params.Identifier, Options: "i"}}}}}
 	limit := int64(10)
-	cur, err := database.MongoClient.Courses.Collection("courses").Find(context.TODO(), filter, &options.FindOptions{Limit: &limit})
+	cur, err := services.MongoClient.Courses.Collection("courses").Find(context.TODO(), filter, &options.FindOptions{Limit: &limit})
 	if err != nil {
 		print(err.Error())
 	}

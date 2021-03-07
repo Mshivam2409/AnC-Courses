@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Mshivam2409/AnC-Courses/database"
 	"github.com/Mshivam2409/AnC-Courses/models"
 	"github.com/gofiber/fiber/v2"
 	kratos "github.com/ory/kratos-client-go/client"
@@ -58,7 +57,7 @@ func (ory *Ory) IsAuthorized(tokenString string, resource string) (bool, error) 
 func (ory *Ory) CanRegister(username string) (bool, error) {
 	u := &models.MGMUser{}
 	// filte/r := bson.D{{Key: "username", Value: username}}
-	err := database.MongoClient.Users.Collection("ug").FindOne(context.TODO(), bson.D{}).Decode(u)
+	err := MongoClient.Users.Collection("ug").FindOne(context.TODO(), bson.D{}).Decode(u)
 	if err != nil {
 		log.Printf("Unable to check access for %s : %v", username, err)
 	}
@@ -74,7 +73,7 @@ func (ory *Ory) SetKratosID(kid string, username string) error {
 	filter := bson.D{{Key: "username", Value: username}}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "kid", Value: kid}}}}
 	fmt.Println(kid, 11)
-	err := database.MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
+	err := MongoClient.Users.Collection("ug").FindOneAndUpdate(context.TODO(), filter, update).Decode(u)
 	if err != nil {
 		log.Printf("Unable to check access : %v", err)
 	}
@@ -128,7 +127,7 @@ func (ory *Ory) GetClearanceLevel(tokenString string) (int, error) {
 	}
 	u := &models.MGMUser{}
 	filter := bson.D{{Key: "username", Value: claims["username"]}}
-	err = database.MongoClient.Users.Collection("ug").FindOne(context.TODO(), filter).Decode(u)
+	err = MongoClient.Users.Collection("ug").FindOne(context.TODO(), filter).Decode(u)
 	if err != nil {
 		log.Printf("Unable to check access : %v", err)
 	}

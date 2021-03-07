@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/Mshivam2409/AnC-Courses/database"
 	"github.com/Mshivam2409/AnC-Courses/models"
 	"github.com/Mshivam2409/AnC-Courses/services"
 	"github.com/gofiber/fiber/v2"
@@ -42,7 +41,7 @@ func CreateFile(c *fiber.Ctx) error {
 			{Key: "driveFiles", Value: bson.A{"$each", files}},
 		}},
 	}
-	err = database.MongoClient.Courses.Collection("courses").FindOneAndUpdate(context.TODO(), bson.D{{Key: "number", Value: cno}}, update).Decode(&models.MGMCourse{})
+	err = services.MongoClient.Courses.Collection("courses").FindOneAndUpdate(context.TODO(), bson.D{{Key: "number", Value: cno}}, update).Decode(&models.MGMCourse{})
 	return c.Status(200).JSON(fiber.Map{"message": "success"})
 }
 

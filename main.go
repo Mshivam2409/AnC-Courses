@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/Mshivam2409/AnC-Courses/api"
-	"github.com/Mshivam2409/AnC-Courses/database"
 	"github.com/Mshivam2409/AnC-Courses/services"
 	"github.com/spf13/viper"
 	"golang.org/x/sync/errgroup"
@@ -20,7 +19,7 @@ func init() {
 	if err != nil {
 		log.Panicf("Fatal error config file: %s", err)
 	}
-	database.ConnectMongo()
+	services.ConnectMongo()
 	services.InitalizeOryServices()
 }
 
