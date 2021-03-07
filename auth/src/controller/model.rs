@@ -1,11 +1,9 @@
 #![allow(proc_macro_derive_resolution_fallback)]
-
-// pub mod handler;
-// pub mod repository;
 use mongodb::bson;
 use serde_derive::{Deserialize, Serialize};
+use strum_macros;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, strum_macros::ToString)]
 pub enum Roles {
     User,
     Secretary,
@@ -20,14 +18,14 @@ pub struct Client {
     pub name: Option<String>,
     pub email: Option<String>,
     pub index: Option<i32>,
-    pub roles: Option<Vec<Roles>>,
+    pub roles: Option<Roles>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InsertableClient {
     pub name: Option<String>,
     pub email: Option<String>,
-    pub roles: Option<Vec<Roles>>,
+    pub roles: Option<Roles>,
 }
 
 impl InsertableClient {

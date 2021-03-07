@@ -1,5 +1,6 @@
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::{env, fs, io};
 
 pub static CONFIG_PREFIX: &str = "authz";
@@ -8,19 +9,7 @@ pub static APP_ENV: &str = "APP_ENV";
 #[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Config {
     pub mongo_url: String,
-    pub graphql: GqlConfig,
-}
-
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
-pub struct GqlConfig {
-    pub query: Option<Vec<GqlQuery>>,
-    pub mutation: Option<Vec<GqlQuery>>,
-}
-
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
-pub struct GqlQuery {
-    pub name: String,
-    pub allow: Vec<String>,
+    pub graphql: HashMap<String, Vec<String>>,
 }
 
 lazy_static! {

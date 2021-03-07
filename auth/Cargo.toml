@@ -15,8 +15,9 @@ rocket = "0.4.7"
 graphql-parser = "0.2.3"
 yaml-rust = "0.4.5"
 lazy_static = "1.4.0"
+strum_macros = "0.20.1"
 [dependencies.mongodb]
-version = "1.1.1"
+version = "1.2.0"
 default-features = false
 features = ["sync"]
 [dependencies.rocket_contrib]
