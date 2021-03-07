@@ -1,2 +1,2 @@
 mod handler;
-mod models;
+mod model;

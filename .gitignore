@@ -9,3 +9,4 @@ bin/main
 config.yml
 config.yaml
 kratos
+auth/authz.development.yml

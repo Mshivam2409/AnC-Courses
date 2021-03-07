@@ -1,5 +1,3 @@
-// use lazy_static;
-
 use mongodb::sync;
 
 pub fn connect(uri: &str, dbname: &str) -> sync::Database {
@@ -7,8 +5,3 @@ pub fn connect(uri: &str, dbname: &str) -> sync::Database {
     let database = client.database(dbname);
     return database;
 }
-// #[macro_use]
-// lazy_static!{
-
-// }
-// static MongoClient: sync::Database;

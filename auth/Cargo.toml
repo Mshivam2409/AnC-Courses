@@ -22,4 +22,4 @@ features = ["sync"]
 [dependencies.rocket_contrib]
 version = "0.4.7"
 default-features = false
-features = ["mongodb_pool","json"]
+features = ["json"]

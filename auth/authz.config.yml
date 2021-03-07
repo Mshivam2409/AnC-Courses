@@ -1,6 +1,0 @@
-mongo_url: mongodb+srv://anc:courses@cluster0.x6adj.mongodb.net/students?retryWrites=true&w=majority
-graphql:
-  query:
-    - name: SearchCourseMutation
-      allow:
-        - "*"
