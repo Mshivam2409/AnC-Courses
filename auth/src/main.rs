@@ -1,5 +1,9 @@
-use auth;
+use rogue;
 
 fn main() {
-    auth::rocket().launch();
+    match rogue::setup_logger() {
+        Ok(_) => print!(""),
+        Err(_) => print!(""),
+    };
+    rogue::rogue_init().launch();
 }

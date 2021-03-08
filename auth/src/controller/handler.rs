@@ -3,6 +3,9 @@ use crate::config::Config;
 use mongodb::{bson, bson::doc, sync};
 use rocket::http::Status;
 
+/**
+ * Queries the user's database to check whether the user has permission to perform the query/mutation.
+ */
 pub fn check_access(queryname: &str, email: &str, connection: &sync::Database) -> Status {
     let config = Config::get();
     if config.graphql[queryname].contains(&String::from("*")) {
