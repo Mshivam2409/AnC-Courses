@@ -1,14 +1,11 @@
-import React from "react";
-// import url from "utils/api";
-import List from "antd/lib/list";
 import {
   FilePdfOutlined,
   FileUnknownOutlined,
   FileWordOutlined,
   FileZipOutlined,
 } from "@ant-design/icons";
-// import { UserState } from "store";
-import { useRecoilValue } from "recoil";
+import List from "antd/lib/list";
+import React from "react";
 
 const Files = (props: { files: readonly string[] }) => {
   const data: Array<{ fileId: string; name: string }> = props.files.map(

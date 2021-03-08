@@ -26,7 +26,14 @@ type Review {
   instructor: String!
   grading: String!
   course: String!
-  approved: String!
+  approved: Boolean!
+}
+
+input NewReview {
+  semester: String!
+  instructor: String!
+  grading: String!
+  course: String!
 }
 
 type CourseData {
@@ -61,4 +68,6 @@ type User {
 
 type Mutation {
   addCourse(course: NewCourse!): Response
+  addReview(review: NewReview!): Response
+  modifyReview(reviewID: String!, status: Boolean!): Review!
 }

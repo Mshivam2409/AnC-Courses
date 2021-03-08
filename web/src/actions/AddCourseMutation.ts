@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { graphql, commitMutation, Environment } from 'react-relay';
 import { AddCourseMutation } from '__generated__/AddCourseMutation.graphql';
 
@@ -23,6 +24,15 @@ function commit(
             variables: {
                 course: course,
             },
+            onCompleted: (resp, err) => {
+                if (err) {
+                    message.error(`Unable to Add Course! Error:${JSON.stringify(err)}`)
+                }
+                else {
+                    message.success("Successfully Added Course!")
+                }
+            },
+            onError: (err) => { message.error(err.message) }
         }
     );
 }

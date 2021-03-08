@@ -12,33 +12,69 @@ export enum permissions {
     CREATE_COURSE = "CREATE_USER",
     MODIFY_COURSE = "EDIT_POST",
     DELETE_COURSE = "DELETE_COURSE",
+    CREATE_REVIEW = "CREATE_REVIEW",
+    MODERATE_REVIEW = "MODERATE_REVIEW",
     CREATE_FILE = "CREATE_FILE",
     DELETE_FILE = "DELETE_FILE",
-    CREATE_SECY = "CREATE_SECY",
-    DELETE_SECY = "DELETE_SECY",
-    CREATE_COORDI = "CREATE_COORDI",
-    DELETE_COORDI = "DELETE_COORDI",
-    CREATE_ADMIN = "CREATE_ADMIN"
+    ELEVATE_USER = "ELEVATE_USER",
+    DEMOTE_USER = "DEMOTE_USER",
+    BAN_USER = "BAN_USER"
 }
 
 export enum Role {
-    ADMIN = "ADMIN",
-    MANAGER = "MANAGER",
+    BANNED = "BANNED",
     ANONYMOUS = "ANONYMOUS",
     USER = "USER",
-    BANNED = "BANNED",
+    MANAGER = "MANAGER",
+    ADMIN = "ADMIN",
 }
 
 // rules describing what roles have what permissions
 export const rules: Rules<Role, permissions, User> = {
     [Role.ADMIN]: {
+        [permissions.LOGIN_CPANEL]: true,
+        [permissions.CREATE_COURSE]: true,
         [permissions.MODIFY_COURSE]: true,
-        [permissions.LOGIN_CPANEL]: true
+        [permissions.DELETE_COURSE]: true,
+        [permissions.CREATE_REVIEW]: true,
+        [permissions.MODERATE_REVIEW]: true,
+        [permissions.CREATE_FILE]: true,
+        [permissions.DELETE_FILE]: true,
+        [permissions.ELEVATE_USER]: true,
+        [permissions.DEMOTE_USER]: true,
+        [permissions.DEMOTE_USER]: true,
+        [permissions.BAN_USER]: true
+
+    },
+    [Role.MANAGER]: {
+        [permissions.LOGIN_CPANEL]: true,
+        [permissions.CREATE_COURSE]: true,
+        [permissions.MODIFY_COURSE]: true,
+        [permissions.DELETE_COURSE]: false,
+        [permissions.CREATE_REVIEW]: true,
+        [permissions.MODERATE_REVIEW]: true,
+        [permissions.CREATE_FILE]: true,
+        [permissions.DELETE_FILE]: false,
+        [permissions.ELEVATE_USER]: false,
+        [permissions.DEMOTE_USER]: false,
+        [permissions.DEMOTE_USER]: false,
+        [permissions.BAN_USER]: false
     },
     [Role.USER]: {
-        // an abac rule
-        // user can only edit the post if it is the owner of it
+        [permissions.LOGIN_CPANEL]: false,
+        [permissions.CREATE_COURSE]: false,
         [permissions.MODIFY_COURSE]: false,
-        [permissions.LOGIN_CPANEL]: false
+        [permissions.DELETE_COURSE]: false,
+        [permissions.CREATE_REVIEW]: true,
+        [permissions.MODERATE_REVIEW]: false,
+        [permissions.CREATE_FILE]: false,
+        [permissions.DELETE_FILE]: false,
+        [permissions.ELEVATE_USER]: false,
+        [permissions.DEMOTE_USER]: false,
+        [permissions.DEMOTE_USER]: false,
+        [permissions.BAN_USER]: false
+    },
+    [Role.ANONYMOUS]: {
+
     }
 };

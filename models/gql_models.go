@@ -19,6 +19,14 @@ type CourseData struct {
 	Reviews []*Review `json:"reviews"`
 }
 
+type ModifyCourseInput struct {
+	Title    string `json:"title"`
+	Credits  string `json:"credits"`
+	Offered  string `json:"offered"`
+	Contents string `json:"contents"`
+	Dept     string `json:"dept"`
+}
+
 type NewCourse struct {
 	Title    string `json:"title"`
 	Number   string `json:"number"`
@@ -27,6 +35,13 @@ type NewCourse struct {
 	Contents string `json:"contents"`
 	Dept     string `json:"dept"`
 	Author   string `json:"author"`
+}
+
+type NewReview struct {
+	Semester   string `json:"semester"`
+	Instructor string `json:"instructor"`
+	Grading    string `json:"grading"`
+	Course     string `json:"course"`
 }
 
 type Response struct {
@@ -40,7 +55,7 @@ type Review struct {
 	Instructor string `json:"instructor"`
 	Grading    string `json:"grading"`
 	Course     string `json:"course"`
-	Approved   string `json:"approved"`
+	Approved   bool   `json:"approved"`
 }
 
 type SearchParams struct {
@@ -48,10 +63,10 @@ type SearchParams struct {
 }
 
 type User struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Email     string `json:"email"`
-	RollNo    string `json:"rollNo"`
+	ID        string `json:"ID"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	Rollno    string `json:"rollno"`
 	Banned    bool   `json:"banned"`
-	Role      string `json:"role"`
+	Clearance int    `json:"clearance"`
 }

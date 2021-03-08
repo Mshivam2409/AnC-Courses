@@ -1,10 +1,11 @@
-import React from "react";
 import { FormField, Message } from "@ory/kratos-client";
-import { FORM_LABELS } from "../constants";
+import { Button, Form, Input, Typography } from "antd";
 import { KratosMessages } from "components/KratosMessages";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
-import { NavLink } from "react-router-dom";
 import config from "config/kratos";
+import React from "react";
+import { NavLink } from "react-router-dom";
+
+import { FORM_LABELS } from "../constants";
 
 export const KratosForm = ({
   action,

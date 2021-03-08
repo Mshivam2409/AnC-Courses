@@ -1,73 +1,31 @@
-import { Steps, Button, message } from "antd";
-// import React from "react";
+import "react-markdown-editor-lite/lib/index.css";
 
-import React, { useState } from "react";
+import AddCourseMutation from "actions/AddCourseMutation";
 import {
+  Button,
+  Checkbox,
+  Col,
   Form,
   Input,
-  Tooltip,
-  Cascader,
-  Select,
+  message,
   Row,
-  Col,
-  Checkbox,
-  //   Button,
-  AutoComplete,
+  Select,
+  Steps,
 } from "antd";
-import AddCourseMutation from "actions/AddCourseMutation";
-import MdEditor from "react-markdown-editor-lite";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import "react-markdown-editor-lite/lib/index.css";
-// import MarkdownIt from "markdown-it";
-import { depts } from "../constants";
+import MdEditor from "react-markdown-editor-lite";
 import environment from "services/gqlenv";
-// const mdParser = new MarkdownIt(/* Markdown-it options */);
+
+import { depts } from "../constants";
 
 function renderHTML(text: string) {
-  // Using markdown-it
-  //   return mdParser.render(text);
-  // Using react-markdown
   return React.createElement(ReactMarkdown, {
     source: text,
   });
 }
 
 const { Option } = Select;
-const { Step } = Steps;
-const residences = [
-  {
-    value: "zhejiang",
-    label: "Zhejiang",
-    children: [
-      {
-        value: "hangzhou",
-        label: "Hangzhou",
-        children: [
-          {
-            value: "xihu",
-            label: "West Lake",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: "jiangsu",
-    label: "Jiangsu",
-    children: [
-      {
-        value: "nanjing",
-        label: "Nanjing",
-        children: [
-          {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men",
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const formItemLayout = {
   labelCol: {
@@ -189,27 +147,6 @@ const RegistrationForm = () => {
         <Input />
       </Form.Item>
 
-      {/* <Form.Item
-        name="nickname"
-        label={
-          <span>
-            Nickname&nbsp;
-            <Tooltip title="What do you want others to call you?">
-              <QuestionCircleOutlined />
-            </Tooltip>
-          </span>
-        }
-        rules={[
-          {
-            required: true,
-            message: "Please input your nickname!",
-            whitespace: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item> */}
-
       <Form.Item
         name="semester"
         label="Course semester"
@@ -228,26 +165,12 @@ const RegistrationForm = () => {
         </Select>
       </Form.Item>
 
-      {/* <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[{ required: true, message: "Please input your phone number!" }]}
-      >
-        <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
-      </Form.Item> */}
-
       <Form.Item
         name="title"
         label="Title"
         rules={[{ required: true, message: "Please input website!" }]}
       >
-        {/* <AutoComplete
-          options={websiteOptions}
-          onChange={onWebsiteChange}
-          placeholder="website"
-        > */}
         <Input />
-        {/* </AutoComplete> */}
       </Form.Item>
 
       <Form.Item

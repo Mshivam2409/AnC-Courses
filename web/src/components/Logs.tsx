@@ -1,8 +1,7 @@
-import React from "react";
-
-import { Button, Row, Tabs } from "antd";
-import { LazyLog, ScrollFollow } from "react-lazylog";
+import { Button, Tabs } from "antd";
 import { BACKEND_LOGS } from "config/backend";
+import React from "react";
+import { LazyLog } from "react-lazylog";
 
 const { TabPane } = Tabs;
 const Logs = () => {
@@ -13,12 +12,7 @@ const Logs = () => {
           return (
             <TabPane tab={service.name} key={index}>
               <div style={{ height: "50vh" }}>
-                {/* <Row> */}
                 <LazyLog url={service.url} style={{ height: "50vh" }} />
-                {/* </Row> */}
-                {/* <Row>
-                  <Button>Download</Button>
-                </Row> */}
               </div>
               <div style={{ paddingTop: 10 }}>
                 <a href={service.url} download>

@@ -19,14 +19,13 @@ const useOry = (kratos: PublicApi, keto: KetoApi): [boolean, boolean, typeof ses
 
             if (response.status === 200) {
                 const { role } = await keto.whoami();
-                // console.log(role);
                 setSession({ ...response.data, role: role });
                 setLoading(false);
             } else if (response.status === 401) {
                 setLoading(false);
             }
         } catch (error) {
-            // setError(true);
+            setError(true);
             setLoading(false);
         }
         console.log("KRTOSSS")

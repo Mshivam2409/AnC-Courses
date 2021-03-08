@@ -1,21 +1,6 @@
-import { Steps, Button, message } from "antd";
-// import React from "react";
-
-import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  Upload,
-  Tooltip,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  //   Button,
-  AutoComplete,
-} from "antd";
 import { InboxOutlined } from "@ant-design/icons";
+import { AutoComplete, Button, Form, Input, Upload } from "antd";
+import React, { useState } from "react";
 
 const AddFiles = () => {
   const [form] = Form.useForm();
@@ -73,8 +58,8 @@ const AddFiles = () => {
       scrollToFirstError
     >
       <Form.Item
-        name="website"
-        label="Website"
+        name="Course"
+        label="course"
         rules={[{ required: true, message: "Please input website!" }]}
       >
         <AutoComplete

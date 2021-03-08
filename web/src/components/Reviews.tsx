@@ -1,12 +1,11 @@
-// import userEvent from "@testing-library/user-event";
-// import { Collapse, message, Result, Spin, Typography } from "antd";
 import { CourseQueryResponse } from "__generated__/CourseQuery.graphql";
+import ModifyReviewMutation from "actions/ModifyReviewMutation";
+import { Button } from "antd";
 import Collapse from "antd/lib/collapse";
 import Typography from "antd/lib/typography";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import ReactMarkdown from "react-markdown";
-
-// import { IReview } from "types";
+import environment from "services/gqlenv";
 
 const Reviews = (props: {
   reviews: CourseQueryResponse["getCourseData"]["reviews"];
@@ -14,16 +13,26 @@ const Reviews = (props: {
   const { Panel } = Collapse;
   const { reviews } = props;
   return (
-    // <Spin tip="Loading....." spinning={loading}>
-
     <Fragment>
-      {/* <CollectionsPage /> */}
       <Collapse accordion>
-        {reviews.map((review) => {
+        {reviews.map((review, index) => {
           return (
             <Panel
               header={`${review.semester} Prof : ${review.instructor}`}
               key={review.id}
+              extra={
+                <Button
+                  onClick={(e) => {
+                    ModifyReviewMutation.commit(
+                      environment,
+                      review.id,
+                      !review.approved
+                    );
+                  }}
+                >
+                  {review.approved === true ? "Takedown" : "Approve"}
+                </Button>
+              }
             >
               <Typography>
                 <ReactMarkdown children={review.grading} />
@@ -33,39 +42,6 @@ const Reviews = (props: {
         })}
       </Collapse>
     </Fragment>
-    // )}
-
-    // {!loading && reviews.length === 0 && (
-    //   <Result
-    //     title="There are no reviews!"
-    //     // extra={
-    //     // <Button type="primary" key="console">
-    //     //   Go Console
-    //     // </Button>
-    //     // }
-    //   />
-    // )}
-
-    // {error && (
-    //   <Result
-    //     status="warning"
-    //     title="Failed to fetch reviews! Please check your network connection"
-    //   />
-    // )}
-
-    // {/* {loading && (
-    // <div
-    //   style={{
-    //     justifyItems: "center",
-    //     alignSelf: "center",
-    //     alignItems: "center",
-    //     textAlign: "center",
-    //   }}
-    // >
-    //   <Spin tip="Loading....." />
-    // </div>
-    // )} */}
-    // </Spin>
   );
 };
 

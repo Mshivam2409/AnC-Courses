@@ -1,15 +1,11 @@
+import { SearchCoursesQuery } from "__generated__/SearchCoursesQuery.graphql";
 import { message } from "antd";
 import ListCourse from "components/ListCourse";
 import Loader from "components/Loader";
-import Course from "pages/course";
 import ErrorPage from "pages/error";
-import Search from "pages/search";
 import React, { useState } from "react";
 import { graphql, QueryRenderer } from "react-relay";
-import { useParams } from "react-router-dom";
 import environment from "services/gqlenv";
-import { useDebounce } from "use-debounce/lib";
-import { SearchCoursesQuery } from "__generated__/SearchCoursesQuery.graphql";
 
 const SearchCoursesContainer = (props: { params: string }) => {
   return (

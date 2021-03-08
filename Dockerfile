@@ -15,21 +15,11 @@ RUN bash <(curl https://raw.githubusercontent.com/ory/kratos/v0.5.0-alpha.1/inst
 
 RUN bash <(curl https://raw.githubusercontent.com/ory/oathkeeper/master/install.sh) -b . v0.38.6-beta.1
 
-RUN bash <(curl https://raw.githubusercontent.com/ory/keto/master/install.sh) -b . v0.5.7-alpha.1
-
-FROM node:latest
-WORKDIR /
-COPY ./mail/ /
-RUN yarn install
-RUN yarn build
-
 FROM ubuntu:latest
 RUN mkdir -p /var/www/bin/
 COPY --from=0 /server/bin/main /var/www/bin/fiber
 COPY --from=1 /home/download/kratos /var/www/bin/kratos 
-COPY --from=1 /home/download/keto /var/www/bin/keto 
 COPY --from=1 /home/download/oathkeeper /var/www/bin/oathkeeper 
-COPY --from=2 /mailman /var/www/bin/mailman
 
 # Install Supervisor
 RUN apt update && apt install -y supervisor nginx unrar

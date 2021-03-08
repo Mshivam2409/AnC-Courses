@@ -24,6 +24,7 @@ export type CourseQueryResponse = {
             readonly semester: string;
             readonly instructor: string;
             readonly grading: string;
+            readonly approved: boolean;
         }>;
     };
 };
@@ -55,6 +56,7 @@ query CourseQuery(
       semester
       instructor
       grading
+      approved
     }
   }
 }
@@ -187,6 +189,13 @@ v2 = [
             "kind": "ScalarField",
             "name": "grading",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "approved",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -213,14 +222,14 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "50d0c8e28d73be95456f96059a701a4a",
+    "cacheID": "3387574956c4008b1c0ed893be368131",
     "id": null,
     "metadata": {},
     "name": "CourseQuery",
     "operationKind": "query",
-    "text": "query CourseQuery(\n  $cid: String! = \"ESC101\"\n) {\n  getCourseData(number: $cid) {\n    course {\n      title\n      number\n      credits\n      offered\n      contents\n      author\n      driveFiles\n      id\n      dept\n    }\n    reviews {\n      id\n      semester\n      instructor\n      grading\n    }\n  }\n}\n"
+    "text": "query CourseQuery(\n  $cid: String! = \"ESC101\"\n) {\n  getCourseData(number: $cid) {\n    course {\n      title\n      number\n      credits\n      offered\n      contents\n      author\n      driveFiles\n      id\n      dept\n    }\n    reviews {\n      id\n      semester\n      instructor\n      grading\n      approved\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '33dbfbe5ca8876b8c7c4061f7cee6a2c';
+(node as any).hash = '9ce1dadc2eb9c354d12aac987246b27d';
 export default node;
